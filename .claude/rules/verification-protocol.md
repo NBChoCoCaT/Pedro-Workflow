@@ -1,53 +1,53 @@
 ---
 paths:
   - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
-  - "docs/**"
 ---
 
 # Task Completion Verification Protocol
 
-**At the end of EVERY task, Claude MUST verify the output works correctly.** This is non-negotiable.
+**At the end of every task, Claude MUST verify the output works correctly.** This is non-negotiable.
 
-## For Quarto/HTML Slides:
-1. Run `./scripts/sync_to_docs.sh` (or `./scripts/sync_to_docs.sh LectureN`) to render and deploy
-2. Open the HTML in browser: `open docs/slides/LectureX.html` (macOS) or `xdg-open` (Linux)
-3. Verify images display by reading 2-3 image files to confirm valid content
-4. Check HTML source for correct image paths
-5. Check for overflow by scanning dense slides
-6. Verify environment parity: every Beamer box environment has a CSS equivalent in the QMD
-7. Report verification results
+## For LaTeX/Beamer Slides (the only verified artifact in this project)
 
-## For LaTeX/Beamer Slides:
-1. Compile with xelatex and check for errors
-2. Open the PDF to verify figures render (`open` on macOS, `xdg-open` on Linux)
-3. Check for overfull hbox warnings
+1. Compile with XeLaTeX (3 passes + bibtex). The `/compile-latex` skill, or manually:
+   ```bash
+   cd Slides
+   TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode FILE.tex
+   BIBINPUTS=..:$BIBINPUTS bibtex FILE
+   TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode FILE.tex
+   TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode FILE.tex
+   ```
+2. Check exit code = 0 and grep the log for:
+   - `Undefined control sequence` — error
+   - `LaTeX Error` — error
+   - `Citation '...' undefined` — bibliography mismatch
+   - `Overfull \hbox` — width overflow (warning; investigate if > 10 pt)
+   - `Font ... not found` — Korean font missing (advise user to install KoPub Dotum)
+3. Open the PDF to visually confirm figures render correctly:
+   - macOS: `open Slides/FILE.pdf`
+   - Linux: `xdg-open Slides/FILE.pdf`
+4. Read 2–3 image files to confirm they contain valid content (when applicable).
 
-## For TikZ Diagrams in HTML/Quarto:
-1. Browsers **cannot** display PDF images inline — ALWAYS convert to SVG
-2. Use SVG (vector format) for crisp rendering: `pdf2svg input.pdf output.svg`
-3. **NEVER use PNG for diagrams** — PNG is raster and looks blurry
-4. Verify SVG files contain valid XML/SVG markup
-5. Copy SVGs to `docs/Figures/LectureX/` via `sync_to_docs.sh`
-6. **Freshness check:** Before using any TikZ SVG, verify extract_tikz.tex matches current Beamer source
+## For TikZ Diagrams (inline within Beamer)
 
-## For R Scripts:
-1. Run `Rscript scripts/R/filename.R`
-2. Verify output files (PDF, RDS) were created with non-zero size
-3. Spot-check estimates for reasonable magnitude
+1. The diagram compiles inside its host `.tex` file (no standalone extraction in this project).
+2. Apply `tikz-prevention.md` Pass 0–6 (visual review).
+3. If a diagram is edited, recompile the host file and visually inspect the affected slide.
 
-## Common Pitfalls:
-- **PDF images in HTML**: Browsers don't render PDFs inline → convert to SVG
-- **Relative paths**: `../Figures/` works from `Quarto/` but not from `docs/slides/` → use `sync_to_docs.sh`
-- **Assuming success**: Always verify output files exist AND contain correct content
-- **Stale TikZ SVGs**: extract_tikz.tex diverges from Beamer source → always diff-check
+## Verification Checklist
 
-## Verification Checklist:
 ```
-[ ] Output file created successfully
-[ ] No compilation/render errors
-[ ] Images/figures display correctly
-[ ] Paths resolve in deployment location (docs/)
-[ ] Opened in browser/viewer to confirm visual appearance
+[ ] xelatex exit code 0
+[ ] No undefined citations
+[ ] No undefined references
+[ ] Korean text renders (KoPub Dotum or fallback)
+[ ] PDF opens and shows expected layout
+[ ] Bibliography compiles (bibtex run if \cite{} present)
 [ ] Reported results to user
 ```
+
+## Out of scope (currently)
+
+- Quarto/HTML render verification (no Quarto mirror in this project).
+- R script verification (no analysis code in this project).
+- TikZ SVG verification (no HTML mirror — Beamer uses inline TikZ).

@@ -1,23 +1,22 @@
-# CLAUDE.MD -- Academic Project Development with Claude Code
+# CLAUDE.MD — 03_AIWTPGap 작업환경
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
+**Project:** 03_AIWTPGap — AI-assisted Information Provision and the WTP–WTA Gap
 **Institution:** [YOUR INSTITUTION]
 **Branch:** main
+**Stage:** Design & theory (proposal phase). No analysis code yet.
+**Working language:** 한국어 본문 + 영문 전문용어 (see `.claude/rules/korean-language-convention.md`).
+**Deliverable:** Korean Beamer PDF proposal (single artifact, no Quarto/HTML mirror).
 
 ---
 
 ## Core Principles
 
-- **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
-- **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
-- **Quality gates** -- nothing ships below 80/100
-- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to [MEMORY.md](MEMORY.md)
+- **Plan first** — enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`.
+- **Verify after** — compile the Beamer PDF and confirm output at the end of every task.
+- **Single source of truth** — `Slides/*.tex` is authoritative. There is no derived Quarto/HTML mirror in this project.
+- **Quality gates** — nothing ships below 80/100 (Beamer rubric only — see `.claude/rules/quality-gates.md`).
+- **Korean working language** — plans, logs, specs, and proposal body are in Korean; technical terms (WTP/WTA/BDM/SPA/induced/homegrown/…) stay in English.
+- **[LEARN] tags** — when corrected, save `[LEARN:category] wrong → right` to [MEMORY.md](MEMORY.md).
 
 Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and session logs are in [quality_reports/](quality_reports/).
 
@@ -26,54 +25,49 @@ Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and se
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
-├── CLAUDE.MD                    # This file
-├── .claude/                     # Rules, skills, agents, hooks
-├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports, decision records
-├── explorations/                # Research sandbox (see rules)
-├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+03_AIWTPGap/
+├── CLAUDE.MD                   # This file
+├── MEMORY.md                   # Persistent learnings
+├── .claude/                    # Rules, skills, agents, hooks, references
+├── Bibliography_base.bib       # Centralized bibliography (single file, INV-2)
+├── Figures/                    # Figures and images for Beamer
+├── Preambles/header.tex        # LaTeX preamble (xeCJK + KoPubWorld Dotum)
+├── Slides/                     # Beamer .tex files (authoritative source)
+├── scripts/                    # validate-setup.sh, quality_score.py, surface checks
+├── quality_reports/            # Plans, specs, session logs, decisions, preregistrations
+├── explorations/               # Research sandbox (see exploration-folder-protocol.md)
+├── templates/                  # Session log, requirements spec, preregistration, TikZ snippets
+└── master_supporting_docs/     # Reference papers (PDFs)
 ```
+
+> Removed in this project: `Quarto/`, `docs/`, `scripts/R/`. Quarto/HTML mirror and R analysis are out-of-scope at the proposal stage. Restore from the upstream template if/when those stages are added.
 
 ---
 
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+# Beamer compile (3-pass XeLaTeX). /compile-latex automates this.
+cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode HelloWorld.tex
 
-# Deploy Quarto to GitHub Pages
-./scripts/sync_to_docs.sh LectureN
+# Add bibtex pass once \cite{} is in use:
+BIBINPUTS=..:$BIBINPUTS bibtex HelloWorld
+TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode HelloWorld.tex
+TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode HelloWorld.tex
 
-# Quality score
-python scripts/quality_score.py Quarto/file.qmd
+# Quality score (Beamer rubric, see .claude/rules/quality-gates.md)
+python scripts/quality_score.py Slides/HelloWorld.tex
 
-# Palette sync (LaTeX ↔ SCSS)
-./scripts/check-palette-sync.sh
-
-# Surface-count sync (README ↔ CLAUDE.md ↔ guide ↔ landing page)
-./scripts/check-surface-sync.sh
+# Environment validation (XeLaTeX, KoPubWorld Dotum, hooks)
+./scripts/validate-setup.sh
 ```
-
-**Palette contract:** color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. See [`Preambles/README.md`](Preambles/README.md).
 
 ---
 
 ## Quality Thresholds (advisory)
 
 | Score | Checkpoint | Meaning |
-|-------|------|---------|
+|-------|------------|---------|
 | 80 | Commit | Good enough to save |
 | 90 | PR | Ready for deployment |
 | 95 | Excellence | Aspirational |
@@ -82,67 +76,51 @@ Enforced by `/commit` (halts + asks for override); not enforced by a git pre-com
 
 ---
 
-## Skills Quick Reference
+## Skills Quick Reference (active in this project)
 
 | Command | What It Does |
-|---------|-------------|
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/deploy [LectureN]` | Render Quarto + sync to docs/ |
-| `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
+|---------|--------------|
+| `/compile-latex [file]` | 3-pass XeLaTeX (+ bibtex when citations exist) |
+| `/extract-tikz [file]` | TikZ → standalone PDF (HTML/SVG export unused here) |
 | `/new-diagram [snippet] [output.tex]` | Scaffold a TikZ diagram from the gallery with prevention + review |
-| `/proofread [file]` | Grammar/typo/overflow review |
-| `/visual-audit [file]` | Slide layout audit |
+| `/proofread [file]` | Grammar/typo/overflow review (한국어 본문 적용 가능) |
+| `/visual-audit [file]` | Slide layout audit (overflow, font, box fatigue) |
 | `/pedagogy-review [file]` | Narrative, notation, pacing review |
-| `/review-r [file]` | R code quality review |
-| `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
-| `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
-| `/validate-bib` | Cross-reference citations |
-| `/devils-advocate` | Challenge slide design |
-| `/create-lecture` | Full lecture creation |
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/lit-review [topic]` | Literature search + synthesis |
-| `/research-ideation [topic]` | Research questions + strategies |
-| `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Manuscript review (single-pass / `--adversarial` / `--peer <journal>` simulated pipeline) |
-| `/respond-to-referees [report] [manuscript]` | R&R cross-reference + response draft |
-| `/data-analysis [dataset]` | End-to-end R analysis |
-| `/audit-reproducibility [paper]` | Enforce replication tolerance thresholds on paper ↔ code |
-| `/learn [skill-name]` | Extract discovery into persistent skill |
+| `/slide-excellence [file]` | Combined multi-agent review (visual + pedagogy + proofread) |
+| `/validate-bib` | Cross-reference citations with `Bibliography_base.bib` |
+| `/devils-advocate` | Adversarial 5–7 question challenge to design choices |
+| `/create-lecture` | Pre-Flight → draft → review pipeline (also fits a proposal section) |
+| `/commit [msg]` | Stage, commit, PR, merge (with quality-score gate) |
+| `/lit-review [topic]` | Literature search + synthesis (BibTeX-ready) |
+| `/research-ideation [topic]` | Generate research questions + strategies |
+| `/interview-me [topic]` | Interactive research-idea formalisation |
+| `/review-paper [file]` | Manuscript review — single-pass / `--adversarial` / `--peer <journal>` |
+| `/learn [skill-name]` | Extract a discovery into a persistent skill |
 | `/context-status` | Show session health + context usage |
 | `/deep-audit` | Repository-wide consistency audit |
 | `/permission-check` | Diagnose permission layers when prompts fire unexpectedly |
 | `/seven-pass-review` | Seven-pass adversarial manuscript review (parallel forked subagents) |
 | `/verify-claims [file]` | Chain-of-Verification fact-check (forked verifier, fresh context) |
-| `/checkpoint [topic]` | Save a structured state snapshot (active plan, decisions, file pointers, next actions) before stopping or handing off |
-| `/preregister [--style osf|aspredicted|aea-rct]` | Draft a preregistration document (OSF / AsPredicted / AEA RCT Registry) from a research spec |
+| `/checkpoint [topic]` | Save a structured state snapshot before stopping or handing off |
+| `/preregister [--style osf\|aspredicted\|aea-rct]` | Draft a pre-registration document |
+
+> **Removed:** `/translate-to-quarto`, `/qa-quarto`, `/deploy`, `/data-analysis`, `/review-r`, `/audit-reproducibility`, `/respond-to-referees`. Re-import from the upstream template if those stages are reintroduced.
 
 ---
-
-<!-- CUSTOMIZE: Replace placeholder rows ([your-env], [.your-class]) with your own.
-     Delete the rows marked "(example — delete)" once you've added yours. -->
 
 ## Beamer Custom Environments
 
 | Environment | Effect | Use Case |
 | --- | --- | --- |
-| `[your-env]` | [Description] | [When to use] |
-| `keybox` | Gold background box | Key points *(example — delete)* |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions *(example — delete)* |
+| (to be filled) | | |
 
-## Quarto CSS Classes
-
-| Class | Effect | Use Case |
-| --- | --- | --- |
-| `[.your-class]` | [Description] | [When to use] |
-| `.smaller` | 85% font | Dense content *(example — delete)* |
-| `.positive` | Green bold | Good annotations *(example — delete)* |
+> Add custom Beamer environments here once the proposal's visual conventions are decided. The default palette + theme assignments live in `Preambles/header.tex`.
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-| --- | --- | --- | --- |
-| HelloWorld *(sample — delete when ready)* | `HelloWorld.tex` | `HelloWorld.qmd` | Minimal deck to verify setup |
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
+| File | Beamer | Notes |
+| --- | --- | --- |
+| HelloWorld | `Slides/HelloWorld.tex` | 한글 (KoPubWorld Dotum) 렌더링 검증용 — 설정 점검이 끝나면 본 프로포절 파일로 대체 |
+| Proposal_AIWTPGap *(예정)* | `Slides/Proposal_AIWTPGap.tex` | 본 프로포절 골격 — 다음 세션에서 작성 |
