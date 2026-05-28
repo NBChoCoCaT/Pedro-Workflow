@@ -1,0 +1,579 @@
+% =============================================================================
+% Proposal_AIWTPGap.tex  (v2 — 학부생 친화 재작성)
+% Research proposal: AI Information, Hypothetical Bias & WTP Measurement
+% 15-min presentation, 21 slides
+%
+% v1 (학술 청중) archived as Proposal_AIWTPGap_v1_archived.tex
+% Source spec: quality_reports/specs/research_spec_aiwtp_gap.md (v6)
+% Compile: TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode Proposal_AIWTPGap.tex
+% =============================================================================
+
+\documentclass[aspectratio=169]{beamer}
+\input{header}
+
+% Local override: KoPubWorld Dotum이 시스템에서 누락. Apple SD Gothic Neo로 fallback
+% (macOS 시스템 폰트, 한글 + 기본 라틴 글리프 커버).
+\setCJKmainfont{Apple SD Gothic Neo}
+\setCJKsansfont{Apple SD Gothic Neo}
+\setCJKmonofont{Apple SD Gothic Neo}
+\setmainfont{Apple SD Gothic Neo}
+\setsansfont{Apple SD Gothic Neo}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc}
+
+\title{AI 정보 제공과 WTP 측정의 가상편의}
+\subtitle{AI는 가치 평가를 정확하게 하는가, 왜곡하는가?}
+\author{[저자명]}
+\institute{[소속]}
+\date{\today}
+
+\begin{document}
+
+% =============================================================================
+% Part I — 도입과 동기 (5 slides)
+% =============================================================================
+
+\frame{\titlepage}
+
+% --- Slide 2: 일상의 AI + 좋은 면 + 나쁜 면 (3-in-1) ------------------------
+\begin{frame}{AI와 우리 --- 일상에 들어온 AI의 양면}
+  \footnotesize
+  \textbf{AI는 이미 우리 일상에 들어와 있다.}
+  ChatGPT에게 글을 시키고, 유튜브가 영상을 추천하고, 쇼핑몰이 ``당신을 위한 상품''을 띄우고, 병원에서 진단 보조에 AI가 쓰인다.\\
+  \textbf{핵심 질문: AI의 추천 한마디가 우리의 의사결정을 어떻게 바꾸는가?}
+
+  \vspace{0.6em}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+    \good{\textbf{좋은 면 --- AI의 장점}}
+    \begin{itemize}\itemsep0.15em
+      \item \textbf{정보 접근성 $\uparrow$}: 전문가에게 묻기 어려운 정보를 즉시 얻음.
+      \item \textbf{개인화 추천}: 내 건강 상태·취향 기반 맞춤 추천.
+      \item \textbf{의사결정 보조}: 복잡한 비교·계산 대신 ``한 문장 요약''.
+      \item \textbf{알고리즘 신뢰 (Logg et al.\ 2019):} 사람들은 AI 조언에 인간 전문가보다 \emph{더 큰} 가중치를 부여 (WOA $d \approx 0.4$).
+    \end{itemize}
+
+    \column{0.48\textwidth}
+    \bad{\textbf{나쁜 면 --- AI의 단점}}
+    \begin{itemize}\itemsep0.15em
+      \item \textbf{앵커링 (anchoring)}: AI가 ``XX,XXX원'' 말하면 그 숫자에 머리가 고정.
+      \item \textbf{정보 과부하}: 너무 많은 정보 $\rightarrow$ 판단력 흐려짐 $\rightarrow$ 직관에 의존.
+      \item \textbf{무비판적 수용}: ``AI니까 옳겠지'' --- 검증 없이 따름.
+      \item \textbf{한 번의 오류로 신뢰 붕괴 (Dietvorst et al.\ 2015):} AI 실수 목격 후 AI 선택률 65\,\% $\rightarrow$ 23\,\%.
+    \end{itemize}
+  \end{columns}
+
+  \vspace{0.4em}
+  \key{같은 AI인데 결과가 정반대일 수 있다 --- 그렇다면 *소비자 의사결정의 핵심인 ``가치 평가''*에 AI가 들어오면?}
+\end{frame}
+
+% --- Slide 3: 본 연구가 주목한 문제 -----------------------------------------
+\begin{frame}{본 연구가 주목한 문제}
+  \textbf{양면을 가진 AI가 ``가치 평가(valuation)''에 들어오면 어떻게 될까?}
+
+  \vspace{0.5em}
+  \textbf{일상의 예시 --- 건강기능식품을 살 때}
+  \begin{itemize}\itemsep0.2em
+    \item 마트에서 건강기능식품 한 상자를 본다. ``얼마면 살까?''를 고민.
+    \item AI가 ``귀하의 건강 프로필 기준 적합도 88\,\%, 적정 가치 30,000원''이라 말한다.
+    \item 그러면 \emph{내가 원래 생각했던} 가치 평가가 \emph{어떻게 달라지나}?
+  \end{itemize}
+
+  \vspace{0.6em}
+  \textbf{두 가지 가능성:}
+  \begin{itemize}\itemsep0.15em
+    \item \good{\textbf{좋은 시나리오:}} AI가 모호하던 효능 정보를 명확히 줘서 \emph{더 정확한} 가치 평가 가능.
+    \item \bad{\textbf{나쁜 시나리오:}} AI가 제시한 ``30,000원''에 끌려가서, 실제로는 더/덜 가치 있게 평가하던 것이 \emph{왜곡}됨.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \key{문제: 어느 시나리오가 실제로 작동하는가? 그리고 그 효과는 \emph{측정}에 어떤 영향을 주는가?}
+\end{frame}
+
+% --- Slide 4: 가상편의 -----------------------------------------------------
+\begin{frame}{WTP 측정의 함정 --- 가상편의 (Hypothetical Bias)}
+  \textbf{WTP} (\emph{Willingness to Pay}, 지불 의향): ``이 상품에 얼마까지 낼 수 있나''
+
+  \vspace{0.4em}
+  \textbf{측정의 두 가지 방법, 그리고 둘 사이의 격차:}
+  \begin{itemize}\itemsep0.15em
+    \item \textbf{설문 (CVM)}: ``이 상품을 얼마에 살 의향이 있나요?'' --- 저비용·대규모. \emph{단, 진짜 돈 안 냄.}
+    \item \textbf{실험경매}: 실제 입찰 + 진짜 결제. 정확하나 고비용·소규모.
+    \item \textbf{Fox et al.\ (1998):} 설문 WTP는 실제 경매의 \emph{1.5--1.8배}. \\
+      $\rightarrow$ 사람들은 \emph{가상} 상황에서 가치를 과장한다.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{직관적 비유 --- 카페 커피:}
+  \begin{quote}
+    ``5,000원짜리 커피 살 거예요?'' (설문) $\rightarrow$ ``네''\\
+    실제로 5,000원 내라고 하면? $\rightarrow$ ``음, 좀 비싸네...''
+  \end{quote}
+
+  \vspace{0.3em}
+  \textbf{이 갭이 바로 가상편의:}
+  \[
+    \mathrm{Bias} \;=\; \mathrm{WTP}_{\text{CVM}} \;-\; \mathrm{WTP}_{\text{auction}}
+  \]
+  Bias가 작을수록 ``설문'' 측정이 진짜에 가깝다 $\rightarrow$ 정책·연구에 유용.
+
+  \vspace{0.3em}
+  \key{본 연구의 종속변수 = 이 Bias. AI 정보가 Bias를 \emph{줄이는가, 늘리는가}가 질문.}
+\end{frame}
+
+% --- Slide 5: 연구 질문 ----------------------------------------------------
+\begin{frame}{연구 질문 --- 풀어서 설명}
+  \textbf{한 줄 RQ:}
+  \begin{quote}
+    \emph{AI 개인화 정보가 WTP 측정의 가상편의를 \good{줄이는가}, 아니면 \bad{왜곡}시키는가?}
+  \end{quote}
+
+  \vspace{0.3em}
+  \textbf{풀어서:}
+  \begin{itemize}\itemsep0.15em
+    \item 소비자에게 AI가 만든 개인화 정보를 \emph{보여주면},
+    \item 설문 WTP와 실제 경매 WTP의 차이(=가상편의)가
+    \item \emph{어떻게 변하는가}? 그리고 \emph{왜} 변하는가?
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{4개 세부 질문:}
+  \begin{itemize}\itemsep0.1em
+    \item \textbf{Q1.} AI 개인화 정보 vs 일반 정보 --- \emph{정보원} 효과.
+    \item \textbf{Q2.} 정보량이 많을수록 갭이 줄어드나, 아니면 역전되나?
+    \item \textbf{Q3.} AI $\times$ 고정보량에서 \emph{앵커링·과부하·신뢰 편향} 때문에 갭이 오히려 \emph{커지는가}?
+    \item \textbf{Q4.} 인지능력에 따라 효과가 달라지나? (탐색적)
+  \end{itemize}
+
+  \vspace{0.3em}
+  \key{핵심 기여:} Fox et al.\ (1998) CVM-X 라인의 \emph{21세기 AI 재해석} --- AI를 가상편의 측정의 \emph{calibration tool}로 평가한 최초의 실험경제 연구.
+\end{frame}
+
+% =============================================================================
+% Part II — 두 가지 가설 (4 slides)
+% =============================================================================
+
+% --- Slide 6: 가설 A -------------------------------------------------------
+\begin{frame}{가설 A --- AI가 정확도를 \good{높임} (Bayesian 업데이트)}
+  \textbf{직관:} ``친구가 추천하면 더 잘 사는 느낌''
+  \begin{itemize}
+    \item 건강기능식품의 효능은 직접 검증 어려움 $\rightarrow$ \emph{불확실성} 큼.
+    \item AI가 ``귀하에게 적합도 88\,\%, 4주 후 효과 나타남'' 알려줌 $\rightarrow$ \emph{불확실성 $\downarrow$}.
+    \item 불확실성이 줄면 \emph{진짜 가치}에 더 가깝게 입찰 가능 $\rightarrow$ 경매 WTP $\uparrow$.
+    \item 따라서 \textbf{Bias} ($=$ 설문 $-$ 경매) $\downarrow$.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{이론적 뒷받침 --- Zhao \& Kling (2001):}
+  \begin{itemize}\itemsep0.1em
+    \item 경매에는 \emph{commitment cost} 존재 (진짜 돈 거니까) $\rightarrow$ 정보 정밀도 $\uparrow$가 입찰에 직결.
+    \item 설문은 commitment cost $\approx 0$ (가상) $\rightarrow$ 정보의 한계 효과 제한.
+  \end{itemize}
+
+  \vspace{0.3em}
+  \key{예측: $\beta_{\text{auction}} > \beta_{\text{CVM}}$ --- 경매가 정보에 \emph{더 크게} 반응.}
+\end{frame}
+
+% --- Slide 7: 가설 B -------------------------------------------------------
+\begin{frame}{가설 B --- AI가 \bad{왜곡} (3가지 행동경제 채널)}
+  \footnotesize
+  \textbf{B-1. 앵커링 (Anchoring):}
+  \begin{itemize}\itemsep0.05em
+    \item AI가 ``적정 가치 30,000원''이라 말하면 $\rightarrow$ 그 숫자가 \emph{머리에 못박힘}.
+    \item 진짜 가치가 25,000원이든 35,000원이든, 입찰가가 30,000원으로 끌려감.
+    \item 측정: AnchorDev $=$ Bid $-$ AI 제시가. 0에 가까울수록 강한 앵커링.
+  \end{itemize}
+
+  \vspace{0.3em}
+  \textbf{B-2. 정보 과부하 (Information Overload):}
+  \begin{itemize}\itemsep0.05em
+    \item AI 상세 정보 (성분·임상·적합도\,\%) $\rightarrow$ \emph{처리 용량 초과}.
+    \item 깊이 생각 못 함 $\rightarrow$ ``직감''에 의존 (System 1) $\rightarrow$ \emph{입찰 분산 $\uparrow$} (mean은 안 움직임).
+    \item Lee et al.\ (2020): 인지능력 낮은 그룹의 입찰 분산이 약 \emph{3배}.
+  \end{itemize}
+
+  \vspace{0.3em}
+  \textbf{B-3. AI 신뢰 편향 (Algorithm Appreciation $\leftrightarrow$ Aversion):}
+  \begin{itemize}\itemsep0.05em
+    \item \textbf{무비판적 수용} (Logg 2019): AI 말을 인간 전문가보다 더 신뢰 $\rightarrow$ 입찰이 AI 제시가에 끌려감.
+    \item \textbf{또는 회피} (Dietvorst 2015): AI 한 번 틀리면 거의 안 따름.
+    \item 본 연구 Phase 1 중립화 (다음 슬라이드)로 \emph{Appreciation default} 유지.
+  \end{itemize}
+
+  \vspace{0.2em}
+  \key{예측: 채널 B 작동 시 Bias가 \emph{불규칙하게 변하거나 오히려 커짐}.}
+\end{frame}
+
+% --- Slide 8: 4채널 분해도 (NEW) -------------------------------------------
+\begin{frame}{4채널 분해도 --- 어느 셀이 어느 채널을 식별하나?}
+  \scriptsize
+  \begin{tabular}{p{1.9cm}|p{2.8cm}|p{4.0cm}|p{3.0cm}}
+    \hline
+    \textbf{채널} & \textbf{메커니즘} & \textbf{측정 가능 셀} & \textbf{식별 신호} \\
+    \hline
+    \good{A. Bayesian} & 불확실성 $\downarrow$ → 진짜 가치 수렴 & T1·T3 (정보 추가) + SUR 분석 & $\beta_{\text{auc}} > \beta_{\text{CVM}}$ \\
+    \hline
+    \bad{B-1. 앵커링} & AI 숫자가 입찰가 기준점 & T2 (시장가), T3·T4 (AI 추정가) & AnchorDev $\approx 0$ \\
+    \hline
+    \bad{B-2. 과부하} & 처리 용량 초과 → System 1 & T2·T4 (高) vs T1·T3 (低) & 입찰 분산 $\uparrow$ (mean 무관) \\
+    \hline
+    \bad{B-3. AI 신뢰} & ``AI니까 맞겠지'' 무비판 & T3·T4 (AI) vs T1·T2 (Generic) & ``AI 신뢰도'' 점수 + Pre\_Aversion \\
+    \hline
+  \end{tabular}
+
+  \vspace{0.6em}
+  \footnotesize
+  \textbf{핵심 식별 logic:}
+  \begin{itemize}\itemsep0.1em
+    \item T2 vs T4: 같은 정보량 + anchor 둘 다 있음. 차이는 \emph{AI source 여부}. $\rightarrow$ \textbf{AI 고유 앵커링} (B-1 with B-3) 분리.
+    \item T1 vs T3: 같은 정보량, 차이는 \emph{개인화 + AI source}. $\rightarrow$ AI 개인화 \emph{순수 효과}.
+    \item T3 vs T4: 같은 AI source, 차이는 \emph{정보량}. $\rightarrow$ 과부하 임계점.
+  \end{itemize}
+
+  \vspace{0.1em}
+  \muted{채널 A와 B-1은 관측적으로 일부 겹침 $\rightarrow$ Mediation 분석 (Slide 16)으로 상대 강도 추정.}
+\end{frame}
+
+% --- Slide 9: 예측표 -------------------------------------------------------
+\begin{frame}{어느 쪽이 이길까? --- 5-arm $\times$ 채널 예측표}
+  \small
+  \begin{tabular}{lccc}
+    \hline
+    \textbf{조건} & \textbf{채널 A 예측} & \textbf{채널 B 예측} & \textbf{핵심 비교} \\
+    \hline
+    T0: 정보 없음 (기준선) & --- & --- & 모든 비교의 baseline \\
+    T1: Generic $\times$ Low & 갭 소폭 $\downarrow$ & 변화 미미 & T1 vs T0 \\
+    T2: Generic $\times$ High & 갭 $\downarrow$ & 과부하 분산 $\uparrow$ & T2 vs T1 \\
+    T3: AI $\times$ Low & 갭 $\downarrow$ (개인화) & Appreciation 변동 & T3 vs T1 \\
+    \textbf{T4: AI $\times$ High} & 갭 더 $\downarrow$ & \textbf{앵커링+과부하+편향 $\rightarrow$ 갭 $\uparrow$?} & \textbf{T4 vs T3, T4 vs T2} \\
+    \hline
+  \end{tabular}
+
+  \vspace{0.7em}
+  \key{핵심 격전지: T4 (AI $\times$ High).}
+  \begin{itemize}\itemsep0.1em
+    \item AI의 \good{좋은 면}이 강하면: 정확도 $\uparrow$ $\rightarrow$ Bias 감소.
+    \item AI의 \bad{나쁜 면}이 강하면: 앵커링·과부하·맹신 결합 $\rightarrow$ Bias \emph{증가}.
+    \item \textbf{결과가 음수든 양수든 \emph{해석 가능}} --- 이게 본 연구의 강점.
+  \end{itemize}
+\end{frame}
+
+% =============================================================================
+% Part III — 실험 설계 (5 slides)
+% =============================================================================
+
+% --- Slide 10: 2-Phase 구조 (TikZ) -----------------------------------------
+\begin{frame}{실험 설계 (1) --- 2-Phase 구조}
+  % Coordinate map (P2):
+  %   Phase1 box at (0, 2.6)  -- induced value, token, 중립
+  %   Phase2 box at (0, 0)    -- homegrown value, 건강기능식품, 처치
+  %   Outcome  at  (0, -2.4)  -- Bias 측정
+  \begin{center}
+  \begin{tikzpicture}[
+    scale=0.95, every node/.style={scale=0.95},
+    box/.style={draw, rounded corners, minimum width=11cm, minimum height=1.5cm,
+                text width=10.6cm, align=center, font=\small},
+    arrow/.style={-{Stealth[length=3mm]}, thick}
+  ]
+    \node[box, fill=blue!8] (P1) at (0, 2.7)
+      {\textbf{Phase 1: Induced Value (벤치마크 / 중립)}\\
+       대상 = \emph{token} (가치가 미리 알려진 가상 토큰) $\;\bullet\;$ 모든 집단 동일 절차\\
+       메커니즘 교육 + 연습 + Induced 경매 5라운드 (AI 정보 \emph{없음})};
+
+    \node[box, fill=orange!10] (P2) at (0, 0.0)
+      {\textbf{Phase 2: Homegrown Value (본 실험)}\\
+       대상 = \emph{건강기능식품} (실제 시장 상품) $\;\bullet\;$ 5개 처치 집단 (T0--T4)\\
+       처치 자료 $\rightarrow$ CVM 응답 $\rightarrow$ Filler (5분) $\rightarrow$ Random $n$-th price 경매};
+
+    \node[box, fill=green!12] (OUT) at (0, -2.7)
+      {\textbf{측정: Bias} $=$ $\mathrm{WTP}_{\text{CVM}} - \mathrm{WTP}_{\text{auction}}$\\
+       + AnchorDev $=$ Bid $-$ AI 제시가 (T3/T4) $\;\bullet\;$ Phase 1 Deviation $=$ $|\mathrm{Bid} - \mathrm{TrueValue}|$};
+
+    \draw[arrow] (P1) -- node[right, font=\footnotesize] {동일 피험자} (P2);
+    \draw[arrow] (P2) -- node[right, font=\footnotesize] {arm별 처치 효과} (OUT);
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{-0.4em}
+  \footnotesize
+  \textbf{Phase 1 중립화의 3가지 역할:}
+  (1) 랜덤 배정 검증, (2) 경매 숙련도 균등화 (Plott--Zeiler 2005),
+  (3) AI 오류 노출 차단 (Algorithm Aversion 회피, Dietvorst 2015).
+\end{frame}
+
+% --- Slide 11: 5개 처치 집단 ------------------------------------------------
+\begin{frame}{실험 설계 (2) --- 5개 처치 집단}
+  \begin{center}
+  \small
+  \begin{tabular}{l|cc}
+    & \textbf{정보량 低 (요약)} & \textbf{정보량 高 (상세)} \\
+    \hline
+    \textbf{Generic} & T1 ($n{=}50$) 비개인화 요약 & T2 ($n{=}50$) 비개인화 상세 + 시장가 \\
+    \textbf{AI}      & T3 ($n{=}50$) AI 개인화 요약 + AI 추정가 & \textbf{T4 ($n{=}50$) AI 개인화 상세 + AI 추정가} \\
+  \end{tabular}
+  \end{center}
+  \vspace{0.4em}
+  $+$ T0 ($n{=}50$): 기본 설명만 (100자) --- 정보 \emph{없음} 기준선. \textbf{총 $n = 250$.}
+
+  \vspace{0.7em}
+  \textbf{식별 핵심 비교 (Slide 8 4채널 매핑 참고):}
+  \begin{itemize}\itemsep0.15em
+    \item \textbf{T1 vs T3:} AI 개인화 \emph{순수} 효과 (정보량 통제).
+    \item \textbf{T1 vs T2:} 정보량 효과 (비-AI 통제, 과부하 임계점).
+    \item \textbf{T3 vs T4:} 정보량 효과 (AI 통제, 앵커링/과부하 임계점).
+    \item \textbf{T2 vs T4:} 같은 고정보량 + anchor에서 AI source 효과 ($=$ AI 고유 앵커링).
+    \item \textbf{T0 vs (T1\,$\ldots$\,T4):} 정보 유무 전체 효과.
+  \end{itemize}
+\end{frame}
+
+% --- Slide 12: 제품 -------------------------------------------------------
+\begin{frame}{실험 설계 (3) --- 제품: 건강기능식품}
+  \textbf{선정: 건강기능식품 (Dietary Supplement)} --- 예: 프로바이오틱스 / 오메가-3 / 멀티비타민 1개월분.
+
+  \vspace{0.5em}
+  \textbf{선정 근거 (4가지):}
+  \begin{itemize}\itemsep0.2em
+    \item \textbf{신뢰재(credence good):} 효능을 직접 검증하기 어려움 $\rightarrow$ AI 정보의 \emph{불확실성 감소 효과}가 의미를 가짐 (채널 A 작동 조건).
+    \item \textbf{AI 개인화 자연스러움:} 건강 상태·식이·부족 영양소 기반 추천이 \emph{실제 서비스로 존재} $\rightarrow$ Algorithm Appreciation 발생 조건.
+    \item \textbf{시장 가격 존재:} 약 30,000원/월 수준 $\rightarrow$ 실험 경매 가격대 자연스러움 + Anchor 설계 가능.
+    \item \textbf{이중 가상 문제 없음:} 배양육 등과 달리 국내에서 \emph{실제로 살 수 있는} 상품 $\rightarrow$ 외적 타당성.
+  \end{itemize}
+
+  \vspace{0.3em}
+  \muted{단, 순수 credence가 아닌 ``credence-experience 혼합재'' (소화 개선은 1--2주 체감).
+  $\rightarrow$ 구매 경험 빈도를 채널 A 강도의 \emph{moderator}로 격상 (탐색적).}
+\end{frame}
+
+% --- Slide 13: AI 메시지 ---------------------------------------------------
+\begin{frame}{실험 설계 (4) --- AI 메시지 5가지 비교}
+  \footnotesize
+  \begin{tabular}{l|p{3.8cm}|p{4.6cm}|p{2cm}}
+    \hline
+    \textbf{Arm} & \textbf{개인화 여부} & \textbf{핵심 내용 (예시)} & \textbf{Anchor} \\
+    \hline
+    T0 (기준) & 없음 & ``프로바이오틱스 30포, 1개월분.'' (100자) & 없음 \\
+    T1 (Gen$\times$Lo) & 없음 & 효능 요약 3문장 + 식약처 인증 & 없음 \\
+    T2 (Gen$\times$Hi) & 없음 & 성분표 + 임상 근거 + 주의사항 (1쪽) & \textbf{시장 평균가 명시 (30,000원)} \\
+    T3 (AI$\times$Lo) & \textbf{건강 프로필 참조} & ``귀하 적합도 87\,\%, 부족 영양소 충족'' (3문장) & \textbf{AI 추정가 명시 ($\pm 20\%$ 변이)} \\
+    \textbf{T4 (AI$\times$Hi)} & \textbf{프로필 + 개인 점수} & T3 + 성분별 적합도 + 비교 순위 + 발현 시기 + 반응률 (1쪽) & \textbf{AI 추정가 명시 ($\pm 20\%$)} \\
+    \hline
+  \end{tabular}
+
+  \vspace{0.6em}
+  \small
+  \key{AnchorDev 직접 측정:}
+  \begin{itemize}\itemsep0.05em
+    \item T3/T4: $\mathrm{AnchorDev} = \mathrm{Bid} - \mathrm{AI\_price}$. 0에 가까울수록 강한 앵커링.
+    \item T2: $\mathrm{AnchorDev}_{\text{gen}} = \mathrm{Bid} - \mathrm{Generic\_price}$ (단일 reference).
+    \item AI 고유 앵커링 $=$ $\mathrm{AnchorDev}_{\text{T4}} - \mathrm{AnchorDev}_{\text{T2}}$ (T4와 T2 anchor 모두 명시, 차이는 AI source뿐).
+    \item \textbf{AI 추정가의 $\pm 20\%$ 변이} (피험자별 무작위) $\rightarrow$ 앵커링 \emph{방향성}도 검증.
+  \end{itemize}
+\end{frame}
+
+% --- Slide 14: 경매 + 절차 -------------------------------------------------
+\begin{frame}{실험 설계 (5) --- 경매 방식과 절차}
+  \textbf{경매: Random $n$-th Price Auction} (Shogren et al.\ 2001)
+  \begin{itemize}\itemsep0.1em
+    \item 입찰자들의 입찰가를 순위 매김 $\rightarrow$ \emph{무작위로} $n$ 추출 $\rightarrow$ 상위 $(n-1)$명이 $n$번째 가격에 구매.
+    \item 표준 SPA(2등 가격 경매)의 ``low-value 입찰자 무성의'' 문제를 회피 (off-margin engagement).
+    \item \emph{진짜 돈 결제} $\rightarrow$ 가상편의의 ``경매 측'' 측정에 적합.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{전체 절차 (총 75--80분):}
+  \begin{enumerate}\itemsep0.1em
+    \item \textbf{사전 설문 (10분):} 건강 프로필, CRT, AI 사용 경험, Pre\_Aversion.
+    \item \textbf{Phase 1 (25분):} 메커니즘 교육 + 연습 3R + Induced 경매 5R.
+    \item \textbf{Phase 2 (30분):} \textbf{처치 자료} (T0--T4) $\rightarrow$ \textbf{CVM 응답} $\rightarrow$ \textbf{Filler task (5분)} $\rightarrow$ \textbf{Random $n$-th price 경매 5R}.
+    \item \textbf{사후 설문 (10분):} Manipulation check, AI 신뢰도, 앵커링·과부하 자기보고.
+  \end{enumerate}
+
+  \vspace{0.3em}
+  \muted{\textbf{Filler task의 역할:} CVM 응답이 경매의 ``내적 anchor''로 작동하는 순서 효과 차단 (이중 앵커링 위험 통제).}
+\end{frame}
+
+% =============================================================================
+% Part IV — 분석 전략 + Benchmark (5 slides)
+% =============================================================================
+
+% --- Slide 15: 주 분석 ----------------------------------------------------
+\begin{frame}{분석 (1) --- 주 분석: 2$\times$2 팩토리얼}
+  \textbf{Phase 2 주 회귀:}
+  \begin{align*}
+    \mathrm{Bias}_i &= \alpha + \delta_{\text{src}} \cdot \mathrm{AI}_i + \delta_{\text{amt}} \cdot \mathrm{High}_i \\
+                    &\quad + \delta_{\text{int}} \cdot (\mathrm{AI}_i \times \mathrm{High}_i) + \gamma \cdot \mathrm{Pre\_Aversion}_i + \delta X_i + \varepsilon_i
+  \end{align*}
+
+  \vspace{0.3em}
+  \textbf{핵심 가설 (해석 가이드):}
+  \begin{itemize}\itemsep0.15em
+    \item $\delta_{\text{src}} < 0$: AI 개인화가 갭 \good{감소} $\rightarrow$ 채널 A 작동.
+    \item $\delta_{\text{amt}} < 0$: 정보량 $\uparrow$가 갭 \good{감소} $\rightarrow$ 채널 A 작동.
+    \item \textbf{$\delta_{\text{int}} > 0$:} AI $\times$ High에서 갭 \bad{증가} $\rightarrow$ \textbf{채널 B 지배} (앵커링/과부하/편향 결합).
+  \end{itemize}
+
+  \vspace{0.4em}
+  \key{본 연구의 핵심 시그널:} 결과가 $\delta_{\text{int}} > 0$이면 ``AI 정보가 \emph{많아질수록 오히려 위험}''.\\
+  $\delta_{\text{int}} \leq 0$이면 ``AI 정보가 가상편의 \emph{측정의 도구}로 유용''.
+\end{frame}
+
+% --- Slide 16: 두 가설 구분 -----------------------------------------------
+\begin{frame}{분석 (2) --- 두 가설 어떻게 구분하나}
+  \textbf{도구 1 --- SUR 병렬 회귀:} CVM과 경매 WTP의 \emph{비대칭 이동} 검정.
+  \begin{itemize}\itemsep0.05em
+    \item $\beta_{\text{auc}} > \beta_{\text{CVM}}$ $\rightarrow$ 경매가 더 반응 = \good{채널 A} (Bayesian).
+    \item $\beta_{\text{auc}} \approx \beta_{\text{CVM}}$ $\rightarrow$ 두 WTP 동일 이동 = \bad{이중 앵커링} (Filler로 부분 통제).
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{도구 2 --- AnchorDev 직접 측정:}
+  \begin{itemize}\itemsep0.05em
+    \item $|\mathrm{AnchorDev}| \approx 0$ $\rightarrow$ 입찰이 AI 제시가에 \bad{수렴} = 강한 앵커링.
+    \item T2 (시장가 anchor)과 T4 (AI 추정가 anchor) 비교 $\rightarrow$ \emph{AI 고유 앵커링} 분리.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{도구 3 --- 경쟁 매개 분석 (Competing Mediation):}
+  \begin{align*}
+    \mathrm{WTP}_{\text{auc},i} &= \alpha + \gamma \mathrm{T}_i + a_A \mathrm{Uncertainty\_dec}_i + a_B \mathrm{Anchoring\_score}_i + \delta X_i + \varepsilon_i
+  \end{align*}
+  $\rightarrow$ 채널 A vs B-1의 \emph{상대 강도} 추정 (둘이 관측적 등가이므로 완전 분리 불가, 상대만).
+
+  \vspace{0.3em}
+  \key{Reframing:} ``채널의 완전 분리''$\rightarrow$``\emph{상대적 크기 추정 및 조건부 우세 판별}.''
+\end{frame}
+
+% --- Slide 17: Benchmark 내부 (NEW) ----------------------------------------
+\begin{frame}{분석 (3) --- Benchmark \good{내부} (조작 점검 + 이질성)}
+  \textbf{내부 Benchmark 2가지 --- 본 실험 \emph{내부}에서 측정·검증.}
+
+  \vspace{0.4em}
+  \textbf{(A) Phase 1 Induced Deviation --- 랜덤 배정 검증:}
+  \begin{itemize}\itemsep0.1em
+    \item Phase 1에서는 \emph{모든 집단 같은 조건} (AI 정보 없음).
+    \item 측정: $\mathrm{Deviation}_i = |\mathrm{Bid}_i - \mathrm{TrueValue}_i|$.
+    \item \textbf{예측:} $\beta_1 = \beta_2 = \beta_3 = \beta_4 \approx 0$ (집단 간 차이 없음).
+    \item $\rightarrow$ 차이가 있으면 \emph{randomization 실패} 확인 (Phase 2 결과 신뢰성에 critical).
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{(B) Lee et al.\ (2020) CRT 분산비 --- 채널 B-2 검증:}
+  \begin{itemize}\itemsep0.1em
+    \item Lee et al.\ 발견: 인지능력 낮은 그룹의 입찰 분산이 약 \emph{3배} (induced value 경매).
+    \item 본 연구: 처치별 $\mathrm{Var\_ratio} = \mathrm{SD}_{\text{CRT-low}} / \mathrm{SD}_{\text{CRT-high}}$ (Phase 2 경매 WTP).
+    \item \textbf{예측 (채널 B-2 작동 시):} T4(AI $\times$ High)에서 Var\_ratio가 T0보다 \emph{증가}.
+    \item $\rightarrow$ ``AI 상세 정보가 저-CRT 집단의 입찰 \emph{불안정성}을 증폭'' 직접 검증.
+  \end{itemize}
+
+  \vspace{0.2em}
+  \key{내부 benchmark $=$ 본 실험의 \emph{자기 통제} 검정. 결과 신뢰성의 핵심.}
+\end{frame}
+
+% --- Slide 18: Benchmark 외부 (NEW) ---------------------------------------
+\begin{frame}{분석 (4) --- Benchmark \good{외부} (선행연구 효과 크기)}
+  \textbf{외부 Benchmark --- 선행연구의 효과 크기를 \emph{본 연구 결과의 맥락}으로.}
+
+  \vspace{0.4em}
+  \scriptsize
+  \begin{tabular}{p{3.2cm}|p{3.0cm}|p{5.4cm}}
+    \hline
+    \textbf{선행연구 (외부 기준)} & \textbf{외부 효과 크기} & \textbf{본 연구 비교점} \\
+    \hline
+    \textbf{Choi et al.\ (2018)}\\한국 쌀 등급 정보 & WTP 이동 $\pm 15\%$ & T1$\rightarrow$T3 또는 T2$\rightarrow$T4 효과가 이 범위와 비교 가능한지 \\
+    \hline
+    \textbf{Tuncel \& Hammitt (2014)}\\WTP/WTA 메타분석 & $\mathrm{WTA}/\mathrm{WTP} \approx 3$ & 본 연구 Bias 절대 크기가 메타분석 표준 어디에 위치하는지 \\
+    \hline
+    \textbf{Logg et al.\ (2019)}\\AI 가중치 (WOA) & $d \approx 0.4$ & T3·T4 처치 효과가 Algorithm Appreciation 효과 범위 내인지 \\
+    \hline
+    \textbf{Fox et al.\ (1998)}\\CVM-X 보정계수 & 0.55--0.69 & 본 연구 T0의 Bias가 Fox baseline과 일관되는지 \\
+    \hline
+  \end{tabular}
+
+  \vspace{0.5em}
+  \small
+  \textbf{보고 방식:}
+  \begin{itemize}\itemsep0.05em
+    \item Discussion 섹션에서 ``본 연구 효과 $=$ Choi 효과의 $X$배 / Logg 효과의 $Y$배'' 형식.
+    \item 단, \emph{서로 다른 표본·제품·시기}이므로 \emph{illustrative comparison}으로 framing.
+    \item Cheap talk (List 2001)와의 \emph{이론적 구분}은 별도 단락에서.
+  \end{itemize}
+
+  \vspace{0.2em}
+  \key{외부 benchmark $=$ \emph{본 연구 결과 크기의 학술적 맥락 위치}.}
+\end{frame}
+
+% --- Slide 19: 이질성 + 다중비교 -------------------------------------------
+\begin{frame}{분석 (5) --- 이질성과 다중비교 위계}
+  \textbf{이질성 분석: $2 \times 2 \times \mathrm{CRT}$ (탐색적, 사전등록):}
+  \begin{itemize}\itemsep0.1em
+    \item Bergman et al.\ (2010): CRT $\times$ 앵커링 비유의 ($p = 0.526$). CAT(인지능력)은 유의 ($p = 0.043$).
+    \item $\rightarrow$ CRT 이질성은 \emph{confirmatory 아님}, 탐색적 발견으로만 보고.
+    \item \textbf{$\varphi_3 \approx 0$이어도 ``미탐지(inconclusive)''로 표현} ($\neq$ ``Bergman과 일관'').
+  \end{itemize}
+
+  \vspace{0.3em}
+  \textbf{구매 경험 Moderator (탐색적):}
+  $\psi \cdot (\mathrm{AI}_i \times \mathrm{Experience\_high}_i)$
+  $\rightarrow$ 경험자에게 AI 효과가 약하면 credence 가정 부분 약화.
+
+  \vspace{0.4em}
+  \textbf{다중비교 위계 (사전등록):}
+  \begin{itemize}\itemsep0.05em
+    \item \textbf{1단계 Confirmatory:} $2 \times 2$의 3개 계수 $\rightarrow$ \emph{Holm correction}.
+    \item \textbf{2단계 Secondary:} SUR + 4경로 mediation $\rightarrow$ \emph{FDR (Benjamini--Hochberg)}.
+    \item \textbf{3단계 Exploratory:} $\varphi_3$ (CRT), $\psi$ (Experience) $\rightarrow$ 보정 없음, 탐색적 보고.
+  \end{itemize}
+
+  \vspace{0.2em}
+  \key{사전등록 OSF/AsPredicted에 이 3단계 위계를 명시 $\rightarrow$ p-hacking 우려 사전 차단.}
+\end{frame}
+
+% =============================================================================
+% Part V — 마무리 (2 slides)
+% =============================================================================
+
+% --- Slide 20: 기여 + 한계 + 일정 ------------------------------------------
+\begin{frame}{예상 기여, 한계, 일정}
+  \footnotesize
+  \textbf{기여 4가지:}
+  \begin{enumerate}\itemsep0.1em
+    \item AI 정보의 \emph{양면성} 최초 실증 (채널 A vs B의 3개 sub-channels).
+    \item $2 \times 2$ 팩토리얼로 \emph{정보원 $\times$ 정보량} 효과 분리.
+    \item AI 가격 앵커의 WTP 효과 직접 정량화 (가상편의 맥락 최초).
+    \item Fox et al.\ (1998) CVM-X 라인의 \emph{21세기 AI 재해석} --- 새로운 실험 디자인 방법.
+  \end{enumerate}
+
+  \vspace{0.4em}
+  \textbf{한계 3가지:}
+  \begin{itemize}\itemsep0.05em
+    \item \textbf{실험실 $\rightarrow$ 현장} 외적 타당성 약함 (lab credence-good 한정).
+    \item AI 금전 anchor 명시 (T3/T4)가 \emph{ecological validity} 약화 (실제 AI는 가격 직접 제시 드묾).
+    \item 채널 A와 B-1의 \emph{관측적 등가성} $\rightarrow$ 완전 분리 불가 (mediation으로 \emph{상대 크기}만).
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{일정 (잠정):}
+  \begin{itemize}\itemsep0.05em
+    \item M+0--2: AI 메시지 prototype $v2$ + IRB 신청 + 사전등록 (OSF/AsPredicted).
+    \item M+2--3: Pilot ($n \approx 30$) $\rightarrow$ 메시지·Anchor 캘리브레이션.
+    \item M+3--5: Main study 실행 ($n = 250$).
+    \item M+5--7: 데이터 분석 + 논문 작성.
+  \end{itemize}
+
+  \vspace{0.2em}
+  \muted{Future Work: induced value setting에서 AI source effect를 직접 측정하는 companion study (Lee et al.\ 2020 직접 후속).}
+\end{frame}
+
+% --- Slide 21: Thank you -------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=primary-blue}
+\begin{frame}[plain]
+  \centering
+  \vfill
+  {\color{white}\Huge\textbf{Thank you!}\par}
+  \vfill
+\end{frame}
+}
+
+\end{document}

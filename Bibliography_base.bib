@@ -8,14 +8,279 @@
 % 명명 규칙: AuthorYear_keyword  (예: PlottZeiler2005_endowment)
 % 한국어 자료의 저자명은 영문 음역으로 표기 (예: Kang2018_...).
 %
-% 다음 세션에서 채울 핵심 참고문헌 (참고용):
-%   - Kahneman, Knetsch, Thaler (1990) endowment effect
-%   - Horowitz & McConnell (2002) WTP-WTA meta-analysis
-%   - Plott & Zeiler (2005, 2007) misconception account
-%   - Tuncel & Hammitt (2014) updated meta-analysis
-%   - Koszegi & Rabin (2006) reference-dependent preferences
-%   - Becker, DeGroot, Marschak (1964) BDM mechanism
-%   - Vickrey (1961) second-price auction
-%   - AI / LLM information-provision experiments (최신 연구)
+% 검증 상태: 2026-05-26 CoVe 1차+2차 round 완료, 2026-05-28 v6 신규 3편 CoVe 추가
+%   - PASS: 직접 사용 가능
+%   - PARTIAL: 인용 시 정확한 수치는 PDF 재확인
+%   - 자세한 내용은 quality_reports/lit_review_aiwtp_gap.md §Post-Flight 참조
+%   - v6 신규 인용 (Logg, Dietvorst, Bergman): 본 파일 하단 §"AI 행동경제 채널" 섹션
 %
 % ==============================================================================
+
+% ----- Foundational citations (PASS) -----
+
+@article{KKT1990_endowment,
+  author = {Kahneman, Daniel and Knetsch, Jack L. and Thaler, Richard H.},
+  title = {Experimental Tests of the Endowment Effect and the Coase Theorem},
+  journal = {Journal of Political Economy},
+  volume = {98},
+  number = {6},
+  pages = {1325--1348},
+  year = {1990}
+}
+
+@article{KoszegiRabin2006_reference,
+  author = {K{\H{o}}szegi, Botond and Rabin, Matthew},
+  title = {A Model of Reference-Dependent Preferences},
+  journal = {Quarterly Journal of Economics},
+  volume = {121},
+  number = {4},
+  pages = {1133--1165},
+  year = {2006}
+}
+
+@article{Vickrey1961_auction,
+  author = {Vickrey, William},
+  title = {Counterspeculation, Auctions, and Competitive Sealed Tenders},
+  journal = {Journal of Finance},
+  volume = {16},
+  number = {1},
+  pages = {8--37},
+  year = {1961}
+}
+
+@article{BDM1964_mechanism,
+  author = {Becker, Gordon M. and DeGroot, Morris H. and Marschak, Jacob},
+  title = {Measuring Utility by a Single-Response Sequential Method},
+  journal = {Behavioral Science},
+  volume = {9},
+  number = {3},
+  pages = {226--232},
+  year = {1964}
+}
+
+% ----- WTP-WTA 갭 핵심 논쟁 (PASS, N3 PARTIAL) -----
+
+@article{PlottZeiler2005_endowment,
+  author = {Plott, Charles R. and Zeiler, Kathryn},
+  title = {The Willingness to Pay--Willingness to Accept Gap, the ``Endowment Effect,'' Subject Misconceptions, and Experimental Procedures for Eliciting Valuations},
+  journal = {American Economic Review},
+  volume = {95},
+  number = {3},
+  pages = {530--545},
+  year = {2005}
+}
+
+@article{PlottZeiler2007_exchange,
+  author = {Plott, Charles R. and Zeiler, Kathryn},
+  title = {Exchange Asymmetries Incorrectly Interpreted as Evidence of Endowment Effect Theory and Prospect Theory?},
+  journal = {American Economic Review},
+  volume = {97},
+  number = {4},
+  pages = {1449--1466},
+  year = {2007}
+}
+
+@article{IsoniLoomesSugden2011_comment,
+  author = {Isoni, Andrea and Loomes, Graham and Sugden, Robert},
+  title = {The Willingness to Pay--Willingness to Accept Gap, the ``Endowment Effect,'' Subject Misconceptions, and Experimental Procedures for Eliciting Valuations: Comment},
+  journal = {American Economic Review},
+  volume = {101},
+  number = {2},
+  pages = {991--1011},
+  year = {2011}
+}
+
+@article{HorowitzMcConnell2002_meta,
+  author = {Horowitz, John K. and McConnell, Kenneth E.},
+  title = {A Review of {WTA}/{WTP} Studies},
+  journal = {Journal of Environmental Economics and Management},
+  volume = {44},
+  number = {3},
+  pages = {426--447},
+  year = {2002}
+}
+
+@article{TuncelHammitt2014_meta,
+  author = {Tun{\c{c}}el, Tuba and Hammitt, James K.},
+  title = {A New Meta-Analysis on the {WTP}/{WTA} Disparity},
+  journal = {Journal of Environmental Economics and Management},
+  volume = {68},
+  number = {1},
+  pages = {175--187},
+  year = {2014},
+  note = {평균 WTA/WTP 약 3 (환경재 6 이상). 정확한 수치는 본문 표 참조}
+}
+
+% ----- 경험·학습·강제 거래 (PASS) -----
+
+@article{List2003_marketexperience,
+  author = {List, John A.},
+  title = {Does Market Experience Eliminate Market Anomalies?},
+  journal = {Quarterly Journal of Economics},
+  volume = {118},
+  number = {1},
+  pages = {41--71},
+  year = {2003}
+}
+
+@article{List2004_neoclassical,
+  author = {List, John A.},
+  title = {Neoclassical Theory Versus Prospect Theory: Evidence from the Marketplace},
+  journal = {Econometrica},
+  volume = {72},
+  number = {2},
+  pages = {615--625},
+  year = {2004}
+}
+
+@article{EngelmannHollard2010_forcedtrade,
+  author = {Engelmann, Dirk and Hollard, Guillaume},
+  title = {Reconsidering the Effect of Market Experience on the ``Endowment Effect''},
+  journal = {Econometrica},
+  volume = {78},
+  number = {6},
+  pages = {2005--2019},
+  year = {2010}
+}
+
+% ----- Expectation reference point 실험 (PASS, N7 PARTIAL) -----
+
+@article{EricsonFuster2011_expectations,
+  author = {Ericson, Keith M. Marzilli and Fuster, Andreas},
+  title = {Expectations as Endowments: Evidence on Reference-Dependent Preferences from Exchange and Valuation Experiments},
+  journal = {Quarterly Journal of Economics},
+  volume = {126},
+  number = {4},
+  pages = {1879--1907},
+  year = {2011},
+  note = {정확한 확률 처치 수준과 효과 크기는 본문 PDF 확인 권장}
+}
+
+@article{HeffetzList2014_expectations,
+  author = {Heffetz, Ori and List, John A.},
+  title = {Is the Endowment Effect an Expectations Effect?},
+  journal = {Journal of the European Economic Association},
+  volume = {12},
+  number = {5},
+  pages = {1396--1422},
+  year = {2014}
+}
+
+% ----- Methodology (PASS) -----
+
+@article{HaalandRothWohlfart2023_infoprovision,
+  author = {Haaland, Ingar and Roth, Christopher and Wohlfart, Johannes},
+  title = {Designing Information Provision Experiments},
+  journal = {Journal of Economic Literature},
+  volume = {61},
+  number = {1},
+  pages = {3--40},
+  year = {2023},
+  doi = {10.1257/jel.20211658}
+}
+
+@article{CanavariEtAl2019_runningauctions,
+  author = {Canavari, Maurizio and Drichoutis, Andreas C. and Lusk, Jayson L. and Nayga Jr., Rodolfo M.},
+  title = {How to Run an Experimental Auction: A Review of Recent Advances},
+  journal = {European Review of Agricultural Economics},
+  volume = {46},
+  number = {5},
+  pages = {862--922},
+  year = {2019}
+}
+
+@article{JacquemetEtAl2013_oath,
+  author = {Jacquemet, Nicolas and Joule, Robert-Vincent and Luchini, St{\'e}phane and Shogren, Jason F.},
+  title = {Preference Elicitation under Oath},
+  journal = {Journal of Environmental Economics and Management},
+  volume = {65},
+  number = {1},
+  pages = {110--132},
+  year = {2013}
+}
+
+% ----- 보조 채널 (PASS) -----
+
+@article{ZhaoKling2001_commitment,
+  author = {Zhao, Jinhua and Kling, Catherine L.},
+  title = {A New Explanation for the {WTP}/{WTA} Disparity},
+  journal = {Economics Letters},
+  volume = {73},
+  number = {3},
+  pages = {293--300},
+  year = {2001}
+}
+
+@article{CherryEtAl2004_outsideoption,
+  author = {Cherry, Todd L. and Frykblom, Peter and Shogren, Jason F. and List, John A. and Sullivan, Melonie B.},
+  title = {Laboratory Testbeds and Non-Market Valuation: The Case of Bidding Behavior in a Second-Price Auction with an Outside Option},
+  journal = {Environmental and Resource Economics},
+  volume = {29},
+  number = {3},
+  pages = {285--294},
+  year = {2004}
+}
+
+% ----- 한국 / 농산물 valuation: 본 연구의 가장 직접적 선행연구 (PASS, PDF 직접 확인) -----
+
+@article{ChoiEtAl2018_ricegrade,
+  author = {Choi, Young Woon and Lee, Ji Yong and Han, Doo Bong and Nayga Jr., Rodolfo M.},
+  title = {Consumers' Valuation of Rice-Grade Labeling},
+  journal = {Canadian Journal of Agricultural Economics},
+  volume = {66},
+  number = {3},
+  pages = {511--531},
+  year = {2018},
+  doi = {10.1111/cjag.12168}
+}
+
+% ==============================================================================
+% 추후 추가 예정 (폴더 보유분):
+%   - CorriganEtAl2012_repeated-rounds
+%   - FoxEtAl1998_CVM-X
+%   - LeeEtAl2020_cognitive-ability
+%   - LeeFox2015_negative-bids
+%   - List2001_cheaptalk-sportscards
+%   - ShogrenEtAl2001_nth-price
+% (인용 필요 시점에 entry 작성)
+% ==============================================================================
+
+% ==============================================================================
+% AI 행동경제 채널 — v6 신규 인용 (2026-05-28 CoVe 검증 완료)
+% Status: 2 PASS + 1 PARTIAL(framing 보강) + 1 venue 정정 (Dietvorst SSRN/JPSP→JEP:General)
+% ==============================================================================
+
+@article{LoggMinsonMoore2019_algorithmappreciation,
+  author = {Logg, Jennifer M. and Minson, Julia A. and Moore, Don A.},
+  title = {Algorithm appreciation: People prefer algorithmic to human judgment},
+  journal = {Organizational Behavior and Human Decision Processes},
+  volume = {151},
+  pages = {90--103},
+  year = {2019},
+  doi = {10.1016/j.obhdp.2018.12.005},
+  note = {JAS (Judge Advisor System) paradigm. WOA d=0.32–0.44 across experiments; Exp 1A d=0.42}
+}
+
+@article{DietvorstSimmonsMassey2015_algorithmaversion,
+  author = {Dietvorst, Berkeley J. and Simmons, Joseph P. and Massey, Cade},
+  title = {Algorithm aversion: People erroneously avoid algorithms after seeing them err},
+  journal = {Journal of Experimental Psychology: General},
+  volume = {144},
+  number = {1},
+  pages = {114--126},
+  year = {2015},
+  doi = {10.1037/xge0000033},
+  note = {Forecaster-choice paradigm. Control 65% to Model-and-Human 23% in Study 1 Fig 3}
+}
+
+@article{BergmanEllingsenJohannessonSvensson2010_anchoringcognitive,
+  author = {Bergman, Oscar and Ellingsen, Tore and Johannesson, Magnus and Svensson, Cicek},
+  title = {Anchoring and cognitive ability},
+  journal = {Economics Letters},
+  volume = {107},
+  number = {1},
+  pages = {66--68},
+  year = {2010},
+  doi = {10.1016/j.econlet.2009.12.028},
+  note = {CRT x anchoring non-significant (secondary sources confirm; exact p-value behind paywall). CAT x anchoring significant. Consistent with Oechssler et al. 2009}
+}
