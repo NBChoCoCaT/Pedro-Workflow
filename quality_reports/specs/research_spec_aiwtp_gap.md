@@ -142,8 +142,9 @@ T0에서: 이 경로 부재 → T4 vs. T0 비교에서 Bias 축소가
 AI 상세 정보(고정보 조건) → 처리 용량 초과
 → System 1 (휴리스틱) 작동
 → 입찰 분산 증가 (mean 이동 없음; overload ≠ anchoring)
-→ Lee et al.(AJAE 2020): 저CRT 집단의 입찰 분산이 3배
-→ 이질성: Var_ratio = SD_CRTlow / SD_CRThigh ↑
+→ Lee et al.(AJAE 2020): 저인지능력(RSPM) 집단이 deviation·변동 더 큼
+   [정정 2026-05-31: "분산 3배"는 본문 근거 없음. 실제 = 완전계시 13.4% vs 29.4%]
+→ 이질성: Var_ratio = SD_low / SD_high ↑ (RSPM 기준)
 ```
 
 **B-3. 자동화 편향 (Algorithm Appreciation / Aversion):**
@@ -172,7 +173,9 @@ Logg et al.(2019)의 AA는 *조언 수용(advice-taking)* 패러다임에서 도
 
 ### 2-4. 인지능력의 조절 역할 (탐색적)
 
-Lee et al.(AJAE 2020): 인지능력 낮은 집단 = 입찰 분산 3배 (고CRT 대비)
+> **⚠️ 정정(2026-05-31, 본문 재확인 + lit-review):** Lee et al.(2020)은 **RSPM**(CRT 아님)을 썼고, 본문에 "입찰 분산 3배"는 없음. 실제 수치 = 완전계시 입찰 **고 29.4% vs 저 13.4%**, 집계 revelation ratio **106.7% vs 114.8%**, RSPM *점수* 분산 F=2.42. 본 spec이 CRT를 쓰면 Lee 벤치마크와 **도구 불일치** → RSPM 측정 필요(또는 RSPM+CRT 병행). 상세는 ADR-011 §5 및 `lit_notes_18papers_2026-05-31.md` 참조.
+
+Lee et al.(AJAE 2020): 인지능력(RSPM) 낮은 집단 = 입찰 deviation·변동 더 큼 (고능력 대비)
 List(2001): 경험 없는 참가자에게만 cheap talk 유효
 
 **Bergman et al.(2010, Economics Letters): CRT × 앵커링 상호작용 p=0.526 — 비유의**
@@ -411,9 +414,10 @@ Deviation_i = α + β₁·T1_i + β₂·T2_i + β₃·T3_i + β₄·T4_i + γX_i
 
 예측: β₁ = β₂ = β₃ = β₄ ≈ 0 (중립화 성공 시)
 
-CRT 분산비 벤치마크 (열②):
-  Var_ratio = SD_CRTlow / SD_CRThigh (Phase 1 조건)
-  → Lee et al.(2020): ≈ 3배 — 본 연구 기준선 확인
+인지능력 분산비 벤치마크 (열②) [RSPM 기준 — §2-4 정정 노트 참조]:
+  Var_ratio = SD_low / SD_high (Phase 1 조건)
+  → Lee et al.(2020): 저인지 deviation·변동 ↑ (완전계시 13.4% vs 29.4%)
+    [구 "≈ 3배"는 본문 근거 없음 — 2026-05-31 정정]
 ```
 
 ### 4-2. Phase 2: Homegrown Value 분석 (주 분석 — 2×2 팩토리얼 + SUR 병렬)
@@ -578,9 +582,10 @@ WTP_auction_i = α + Treatment_i·γ
   - 집단 간 Dev 차이 없음 → 경매 숙련도 동등 확인 (조작 점검)
   - Dev가 집단별로 같아야 Phase 2 Bias 차이가 처치 효과로 귀인 가능
 
-열② Lee et al.(2020) CRT 분산비 (내부 벤치마크):
-  - Lee et al.: 저CRT 집단 SD ≈ 3× 고CRT 집단 SD (induced value 조건)
-  - 우리 연구: 처치별 Var_ratio = SD_CRTlow / SD_CRThigh (Phase 2 auction WTP)
+열② Lee et al.(2020) 인지능력(RSPM) 분산비 (내부 벤치마크):
+  - Lee et al.: 저인지(RSPM) 집단이 induced value에서 deviation·변동 더 큼
+    [정정 2026-05-31: 정확 "3×" 수치는 본문 근거 없음; 완전계시 13.4% vs 29.4%]
+  - 우리 연구: 처치별 Var_ratio = SD_low / SD_high (Phase 2 auction WTP), RSPM 기준
   - T4(AI × High)에서 Var_ratio가 T0 대비 증가하면:
     "AI 상세 정보가 저CRT 집단의 입찰 불안정성을 증폭" → 채널 B-2 이질성 확인
 
@@ -659,7 +664,7 @@ References (13편)
 | Fox et al. (CVM-X, 1998) | 가상편의 실재 근거 + 본 연구의 *21세기 AI 재해석* 라인 |
 | List (2001) *Economic Inquiry* | Cheap talk 비교 대상: AI 효과 크기를 CT 효과 배수로 표현 |
 | Corrigan et al. (2012) | 핵심 경고: 정보가 demand revelation 악화 가능 → 채널 B 근거 |
-| Lee et al. (2020) *AJAE* | 인지능력 × 입찰 분산 (CRT 분산비 벤치마크) + Companion study 직접 전신 |
+| Lee et al. (2020) *AJAE* | 인지능력(**RSPM**) × 입찰 deviation (벤치마크: 완전계시 29.4% vs 13.4%) + Companion study 직접 전신 |
 | Jacquemet et al. (2013) *JEEM* | Oath 비교 장치 (cheap talk 대안 메커니즘 비교) + post-experiment robustness |
 | Choi, Lee et al. (2018) *CJAE* | 한국 맥락: 정보 → WTP 이질성 증가 (쌀 등급) + ±15% effect size base rate |
 | Plott & Zeiler (2005) *AER* | Phase 1 중립 절차 기준 (등가 절차 원칙) |

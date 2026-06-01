@@ -92,7 +92,11 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 | ② 내부 기준 (A0, AI 없음) | AI arm vs 무처치 | AI 효과 순증분 |
 | ③ 외부 기준 (Lee 2020) | A0의 능력 격차 vs Lee의 능력 격차 | **설계 타당성(positive control)** |
 
-**핵심 예측(상호작용):** AI 효과(도움·왜곡 모두)가 **저인지능력에 집중** — "AI는 계산 못 하는 사람을 가장 돕고, 동시에 가장 오도한다." (Lee 2020 + Bergman CAT 결과 + List 2001 경험 효과와 정합)
+**Lee 2020 외부 기준 — 실제 수치(정정, 2026-05-31 본문 재확인):** ~~"입찰 분산 3배"~~ 표현은 본문에 없음. 실제: induced SPA에서 perfect demand-revealing 입찰 **고인지 29.4% vs 저인지 13.4%**; 집계 revelation ratio **106.73% vs 114.83%**; RSPM *점수* 분산 차이 F=2.42(p<0.001, 입찰 분산 아님); RE-probit 한계효과 전체 −0.08***, 고 −0.19***, 저 +0.05(n.s.). → A0가 이 능력 격차(저인지 deviation↑)를 재현해야 positive control 성립.
+
+**핵심 예측(상호작용):** AI 효과(도움·왜곡 모두)가 **저인지능력에 집중** — "AI는 계산 못 하는 사람을 가장 돕고, 동시에 가장 오도한다." (Lee 2020 능력→deviation + Bergman CAT 결과 + List 2001 경험 효과와 정합)
+
+**이론 엔진 — Qin et al. (2025) capability–personalization (lit-review·CoVe 검증):** 메타분석(N=82,078)상 AI는 *유능+개인화 불필요* 맥락서 appreciation(d=0.27), 아니면 aversion(d=−0.50). → **Ch1(lottery EV 계산 = 비개인화·AI 유능) = appreciation 조건**, Ch2(건강식품 개인 적합 = 개인화 필요) = aversion 조건. 즉 본 2-chapter 분리가 이 프레임의 *유인적합 valuation 최초 검정*. ⚠️ Logg d≈0.4는 *자기판단* 조건(경매=자기판단)에서 약화되므로 d≈0.27을 보수 기준으로.
 
 ---
 
@@ -110,8 +114,8 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 - [ ] **인지부하 조작 추가 여부**: 측정·층화(현 결정) 외에 시간압박/동시과제로 System 1 유발하는 *진짜 조작*을 추가할지
 - [ ] **Lottery 파라미터**: EV 범위, 분산, 피험자당 개수
 - [ ] **위험선호 instrument**: Holt–Laury vs Eckel–Grossman vs bomb-risk
-- [ ] **셀당 표본 / power**: 연속 vs 이분, 상호작용 검정력 (후속 ADR-008 계열)
-- [ ] **Lee 2020 "분산 3배" 정확 수치** — 본문에서 미확인, 벤치마크 보고 전 재검증 필요 (현재는 *방향*만 확정)
+- [ ] **셀당 표본 / power**: 연속 vs 이분, 상호작용 검정력 (후속 ADR-008 계열; Canavari 2019 Eq.1 + 3-arm ½–¼–¼ 배분 적용)
+- [x] ~~Lee 2020 "분산 3배" 정확 수치~~ — **해결(2026-05-31):** 본문에 "3배" 없음. 실제 수치는 §5 벤치마크에 반영(29.4%/13.4%, 106.7%/114.8%, F=2.42)
 
 ## Rejected alternatives — why not
 
@@ -120,7 +124,9 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 
 ## References
 
-- **본문 확인 선행연구:** PlottZeiler2005 (induced 토큰=무처치 훈련→mug), LeeEtAl2020 (induced 단독, RSPM, deviation), CorriganEtAl2012 (induced에서 정보→Nash 이탈), FoxEtAl1998 (cross-sample 보정), List2001 (경험→외부신호 둔감)
-- **메인 spec:** `quality_reports/specs/research_spec_aiwtp_gap.md` (§3 재조정 필요)
+- **본문 확인 선행연구(폴더):** PlottZeiler2005 (induced 토큰=무처치 훈련→mug), LeeEtAl2020 (induced 단독, RSPM, deviation), CorriganEtAl2012 (induced에서 정보→Nash 이탈), FoxEtAl1998 (cross-sample 보정), List2001 (경험→외부신호 둔감), Shogren2001 (random nth-price 근거), LeeFox2015 (음수 입찰), Canavari2019 (방법·power·배분)
+- **신규 인용(lit-review·CoVe 검증):** Qin et al. (2025, *Psych Bulletin* 151(5)) capability–personalization 메타분석; Spatharioti et al. (2023, arXiv:2307.03744) LLM 정확/오류→과의존; Bockstedt & Buckman (2025, *Mgmt Sci* 72(1)) loss aversion×AI 위임
+- **정독·리뷰 노트:** `quality_reports/lit_notes_18papers_2026-05-31.md`, `quality_reports/lit_review_ai_valuation_2026-05-31.md`
+- **메인 spec:** `quality_reports/specs/research_spec_aiwtp_gap.md` (§3 재조정 필요; §2-3/§2-4/§4-1/§4-5의 "분산 3배"·CRT→RSPM 정정 필요)
 - **관련 ADR:** ADR-001(between-subject 확장), ADR-003(전달방식 재검토), ADR-005(cross-calibration 부활), ADR-010(v6 Phase 1 역할 재정의)
 - **세션 로그:** `quality_reports/session_logs/2026-05-31_induced-separate-design.md`
