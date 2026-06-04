@@ -1,6 +1,6 @@
-# ADR-011: Induced-Value 분리 실험 — Lottery · AI 3-arm · 인지능력 층화 설계
+# ADR-011: Induced-Value 분리 실험 — 결정론적 산수 토큰 · AI 3-arm · 인지능력 층화 설계
 
-**Status:** PROPOSED (초안 — 일부 Open Question 미결)
+**Status:** PROPOSED (초안) · **AMENDED 2026-06-01 (Lottery → 결정론적 산수 토큰; 아래 §Amendment 참조)**
 **Date:** 2026-05-31
 **Context:** induced와 homegrown의 *실험 목적 차이*에 대한 설계 토론 (선행연구 PZ 2005 / Lee et al. 2020 / Corrigan et al. 2012 / Fox et al. 1998 / List 2001 본문 재검토)
 **Extends:** ADR-001 (between-subject) — value-type 축으로 확장
@@ -29,7 +29,7 @@ induced를 처치 없는 숙련도 훈련으로만 사용 (PZ 2005 모델).
 
 ### Option B: induced를 별개 between-subject 실험으로 분리 (본 결정)
 
-induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집단·절차에서 stratified randomization). induced 팔은 lottery + AI 3-arm + 인지능력 층화.
+induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집단·절차에서 stratified randomization). induced 팔은 ~~lottery~~ 〔Amendment: **결정론적 산수 토큰**〕 + AI 3-arm + 인지능력 층화.
 
 **Pro:**
 - induced에서 AI 왜곡(채널 B)을 **순수 측정** (진짜 가치 = EV 고정)
@@ -56,20 +56,49 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 
 ---
 
+## Amendment (2026-06-01): Lottery → 결정론적 산수 토큰
+
+**Status:** ACCEPTED — 설계 명세 §1의 "Lottery" 선택을 **supersede**.
+
+**계기:** methods-referee + domain-referee **독립 검토가 일치**하여 치명적 식별 문제를 지적 — *복권은 induced value가 아니다.*
+
+**문제(요약):**
+- induced value의 정답은 연구자가 부여한 *결정론적* 상환가치. 복권의 정답 입찰은 **확실성등가(CE)**, 위험회피 하 CE<EV이며 CE는 연구자가 모름 → `Bid−EV = 순수 왜곡`이 **거짓**(위험선호가 섞임).
+- A1("정확 AI")이 이탈을 줄이면 *계산 보조* vs *위험선호 덮어쓰기*가 관측상 동일 → 채널 등가 문제가 induced 팔 안에서 부활.
+- BDM을 비EU(Karni–Safra)로 기각했는데 **nth-price도 복권엔 같은 비판** → 내부 모순.
+- Lee 2020 positive control은 *결정론적 토큰* 기반 → 복권 A0와 도구 불일치.
+- 근거: Sprenger 2015(referent가 위험분류 3–4배), Plott–Zeiler fn11(induced 정답=숫자 보고일 수 있음).
+
+**대안 비교 — 결정론적 산수 토큰 vs binary lottery procedure(BLP):** **BLP 기각.** (a) Selten–Sadrieh–Abbink(1999) 위험중립 유도 실증 실패; (b) EU·복합복권 축약 가정(BDM 기각 논리와 충돌); (c) **메커니즘 난해함이 조절변수(인지능력)와 교란** — 저인지자 이탈이 "AI 효과"인지 "BLP 이해 실패"인지 구분 불가.
+
+**결정: 결정론적 산수 토큰 채택.**
+- 토큰 상환가치 = 표시 수량의 *결정론적 산술 함수*. 예: "빨강 7개(개당 800원) + 파랑 3개(개당 400원) = **6,800원**." 위험 0, 정답 정확·연구자가 앎, *계산은 필요*(AI 계산 보조 의미 유지, 산술 단계 수로 난이도 calibrate).
+- **한 수로 동시 해결:** EV≠CE 치명 문제 / nth-price IC(결정론적 → Vickrey 성립) / Lee 2020 positive control 타당 / **인지능력 교란 없음** / 채널 A 완전 부재(불확실성 0) → 채널 B 순수 분리 *완벽*.
+- **선례 Spatharioti et al. (2023):** "cargo space ÷ total length **ratio** … ensures there is **a correct answer** to each task and clear criteria"의 *결정론적이나 계산이 필요한* 과제에 AI가 정확/오류(rigged 4Runner) 정보 — 본 설계와 동형.
+
+**파급:**
+- 위험선호(Holt–Laury)는 더 이상 *주 식별*에 불필요 → 부차 통제로 강등 또는 제거.
+- A2 앵커 방향 ±20% 무작위화는 **유지하되 목적 변경**: 위험선호 분리(불필요) → **앵커링 대칭성·단일방향 confound 통제**.
+- **미해결(별개 결정):** appreciation vs anchoring 식별 — "토큰 전환"은 EV≠CE를 풀지만, "AI 숫자로 끌림"이 *앵커링*인지 *appreciation*인지는 **출처 대비 arm**(AI-라벨 vs 무작위/사람 숫자)으로 별도 해결해야 함(domain-referee MAJOR-3). → Open Question 추가.
+
+---
+
 ## 설계 명세 (induced 팔)
 
-### 1. 대상재: Lottery (induced value)
+### 1. 대상재: 결정론적 산수 토큰 (induced value) 〔Amendment 2026-06-01〕
 
-- 진짜 가치 = 기댓값(EV), *계산해야* 아는 값 → 저인지능력 피험자에게 AI가 **계산 보조(cognitive prosthesis)** 역할 (새 정보 ≠ 채널 A, 계산 대행 = 채널 B 유지)
-- 위험선호 혼입 대응: **중간·저분산 lottery** 사용 + 피험자당 **다중 lottery**(EV·분산 변이)로 위험선호를 within-subject 식별
+- 토큰 상환가치 = 표시 수량의 **결정론적 산술 함수**(예: 7×800 + 3×400 = 6,800원). 위험·불확실성 0 → **진짜 가치 = 정답을 연구자가 정확히 앎** → `Bid − TrueValue` = 순수 왜곡.
+- *계산이 필요*하므로 저인지능력에 AI가 **계산 보조(cognitive prosthesis)** 역할 유지. 산술 단계 수로 인지부하 calibrate.
+- 채널 A(가치 발견) **완전 부재**(배울 불확실성 없음) → 채널 B 순수 분리. nth-price = Vickrey IC 성립(결정론적 good).
+- ~~중·저분산 lottery + 다중 lottery~~ → Lottery 안 supersede(위험선호 교란·CE≠EV·nth-price IC 문제).
 
 ### 2. 3-arm (AI 처치, stratified randomization)
 
 | Arm | 처치 | 식별 |
 |---|---|---|
-| **A0 통제** | lottery, AI 없음 | 기준 deviation = f(인지능력) — Lee 2020 재현 |
-| **A1 AI-정확** | AI가 올바른 EV 제시 | (A1−A0) = AI 계산 보조 효과 |
-| **A2 AI-편향** | AI가 EV **±20% 무작위 방향** 제시 | (A2−A0) = AI 앵커/과의존; (A2−A1) = 정확도 민감도 |
+| **A0 통제** | 토큰, AI 없음 | 기준 deviation = f(인지능력) — Lee 2020 재현 |
+| **A1 AI-정확** | AI가 **올바른 토큰가치** 제시 | (A1−A0) = AI 계산 보조 효과 |
+| **A2 AI-편향** | AI가 **토큰가치 ±20% 무작위 방향** 제시 | (A2−A0) = AI 앵커/과의존; (A2−A1) = 정확도 민감도 |
 
 ### 3. 인지능력 — 측정·층화 (treatment 아님)
 
@@ -78,17 +107,19 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 - 무작위 배정은 AI 3-arm에만, **각 인지능력 층 안에서** 수행
 - → 격자: **AI(3) × 인지능력(2) = 6 셀**, 인지능력 축은 *관찰적*(탐색적 보고)
 
-### 4. 식별 — 위험선호 vs AI 발라내기
+### 4. 식별 〔Amendment 2026-06-01: 결정론적 토큰으로 단순화〕
 
-1. **1차: between 무작위화** → 위험선호가 arm에 균형 배정 → arm 평균 차분에서 소거
-2. **결정적: A2 앵커 방향 ±20% 무작위화** → 위험선호는 일관된 한 방향(직교), 앵커링은 AI 방향 따라 갈림 → `Bid = α + λ·(AI_value − EV) + …`의 λ가 위험선호와 직교 식별
-3. **보조: 위험선호 별도 측정**(Holt–Laury) → 개인별 CE 구성 → A1의 "deviation 감소"가 *계산 보조*인지 *위험선호 덮어쓰기*인지 해석 (A1은 방향 트릭이 없어 측정 필수). 단, 선호 전이성 가정에 *주 결과*를 걸지 않음
+1. **위험선호 교란 자체가 없음** — 결정론적 토큰이라 정답=상환가치, `Bid − TrueValue`가 곧 순수 왜곡. (복권의 CE≠EV 문제 소멸 → 구 §4의 "위험선호 vs AI 발라내기" 불필요.)
+2. **앵커링:** `Bid = α + λ·(AI_value − TrueValue) + …`, λ>0 = 앵커 추종. A2 ±20% 방향 무작위는 **앵커링 대칭성·단일방향 confound 통제**용(위험 분리 목적은 폐기).
+3. **A1 해석 명료:** 정답이 단일·결정론적이라 "계산 보조(정답 수렴)"와 "위험선호 덮어쓰기"가 더 이상 혼동되지 않음.
+4. **appreciation vs anchoring(별개 미해결):** "AI 숫자로 끌림"이 순수 앵커링인지 algorithm appreciation인지는 토큰 전환으로 풀리지 않음 → **출처 대비 arm**(AI-라벨 vs 무작위/사람 숫자, 같은 값) 추가 검토(Open Q).
+5. Holt–Laury는 *주 식별*에서 제거 가능 → (선택) 사전 산술 정확도 측정으로 대체 고려.
 
 ### 5. 벤치마크 — 3겹
 
 | 벤치마크 | 비교 | 역할 |
 |---|---|---|
-| ① 이론 최적 (EV / 위험조정 CE) | 입찰 vs 정답 | 왜곡 절대 크기 |
+| ① 이론 최적 (토큰 정답값, 결정론적) | 입찰 vs 정답 | 왜곡 절대 크기 |
 | ② 내부 기준 (A0, AI 없음) | AI arm vs 무처치 | AI 효과 순증분 |
 | ③ 외부 기준 (Lee 2020) | A0의 능력 격차 vs Lee의 능력 격차 | **설계 타당성(positive control)** |
 
@@ -96,7 +127,7 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 
 **핵심 예측(상호작용):** AI 효과(도움·왜곡 모두)가 **저인지능력에 집중** — "AI는 계산 못 하는 사람을 가장 돕고, 동시에 가장 오도한다." (Lee 2020 능력→deviation + Bergman CAT 결과 + List 2001 경험 효과와 정합)
 
-**이론 엔진 — Qin et al. (2025) capability–personalization (lit-review·CoVe 검증):** 메타분석(N=82,078)상 AI는 *유능+개인화 불필요* 맥락서 appreciation(d=0.27), 아니면 aversion(d=−0.50). → **Ch1(lottery EV 계산 = 비개인화·AI 유능) = appreciation 조건**, Ch2(건강식품 개인 적합 = 개인화 필요) = aversion 조건. 즉 본 2-chapter 분리가 이 프레임의 *유인적합 valuation 최초 검정*. ⚠️ Logg d≈0.4는 *자기판단* 조건(경매=자기판단)에서 약화되므로 d≈0.27을 보수 기준으로.
+**통합 축 — value knowability 〔v7.2 Amendment 2026-06-01: Qin capability–personalization 프레임 제거〕:** 두 챕터를 잇는 축은 *심리 태도(appreciation/aversion)*가 아니라 **진짜 가치를 알 수 있느냐**. Ch1(knowable, 토큰) → AI는 발견 불가 → 순수 왜곡(채널 B); Ch2(unknowable, credence) → AI 정보 제공(A) 또는 왜곡(B). Ch1이 왜곡 채널을 분리 측정 → Ch2 해석을 *정성적 floor*로 보정. 〔Qin 제거 사유: referee 검토 — d값 양적 전이 무근거(메타는 stated-preference), self-judgment·교육 moderator가 Ch1 appreciation을 반대로 밂. Logg/Dietvorst는 배경 인용으로 유지.〕
 
 ---
 
@@ -105,15 +136,15 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 - **homegrown 팔은 별개 실험**으로 분리 — v6의 핵심 자산(Bias = WTP_CVM − WTP_auction, 5-arm, Pre_Aversion, filler)은 homegrown 팔에 그대로 보존
 - **spec §3 재조정 필요** — v6 spec은 여전히 within-subject 2-phase로 기술됨 → 본 ADR과 정합하도록 §3(설계)·§4(분석) 개정 필요 (후속 task)
 - **cross-calibration 부활** — ADR-005의 induced↔homegrown 보정 논리가 집단 수준으로 복귀 (Fox CVM-X AI 버전)
-- **검정력** — 6셀 + 위험선호 시 상호작용 underpowered 위험 → 인지능력·앵커 모두 **연속변수** 처리로 완화; 셀당 N은 별도 power 분석(후속 ADR)
-- **측정 추가** — RSPM(인지능력), Holt–Laury(위험선호), 다중 lottery 입찰 스케줄
+- **검정력** — 6셀 상호작용 underpowered 위험 → 인지능력·앵커 모두 **연속변수** 처리로 완화; 셀당 N은 별도 power 분석(후속 ADR)
+- **측정** — RSPM(인지능력) + (선택) 사전 산술 정확도; 토큰 다중 라운드 입찰. 〔위험선호(Holt–Laury)·다중 lottery는 토큰 전환으로 불필요〕
 
 ## Open Questions (미결 — 초안 단계)
 
 - [ ] **AI 전달 방식**: 완전 static(ADR-003 유지) vs scripted-interactive(통제된 대화형) — 식별은 동일 보존, 차이는 생태적 타당성·manipulation check 강도 vs IRB(deception)·구현 복잡성. *사용자 결정 대기*
 - [ ] **인지부하 조작 추가 여부**: 측정·층화(현 결정) 외에 시간압박/동시과제로 System 1 유발하는 *진짜 조작*을 추가할지
-- [ ] **Lottery 파라미터**: EV 범위, 분산, 피험자당 개수
-- [ ] **위험선호 instrument**: Holt–Laury vs Eckel–Grossman vs bomb-risk
+- [ ] **토큰 파라미터**: 산술 난이도(항 수·자릿수), 값 범위, 라운드 수 (인지부하 calibrate)
+- [ ] **출처 대비 arm 포함 여부**: AI-라벨 vs 무작위/사람 숫자(같은 값) → appreciation vs anchoring 식별 (domain-referee MAJOR-3)
 - [ ] **셀당 표본 / power**: 연속 vs 이분, 상호작용 검정력 (후속 ADR-008 계열; Canavari 2019 Eq.1 + 3-arm ½–¼–¼ 배분 적용)
 - [x] ~~Lee 2020 "분산 3배" 정확 수치~~ — **해결(2026-05-31):** 본문에 "3배" 없음. 실제 수치는 §5 벤치마크에 반영(29.4%/13.4%, 106.7%/114.8%, F=2.42)
 
@@ -125,7 +156,7 @@ induced와 homegrown을 **다른 피험자 집단**에 배정(단, 같은 모집
 ## References
 
 - **본문 확인 선행연구(폴더):** PlottZeiler2005 (induced 토큰=무처치 훈련→mug), LeeEtAl2020 (induced 단독, RSPM, deviation), CorriganEtAl2012 (induced에서 정보→Nash 이탈), FoxEtAl1998 (cross-sample 보정), List2001 (경험→외부신호 둔감), Shogren2001 (random nth-price 근거), LeeFox2015 (음수 입찰), Canavari2019 (방법·power·배분)
-- **신규 인용(lit-review·CoVe 검증):** Qin et al. (2025, *Psych Bulletin* 151(5)) capability–personalization 메타분석; Spatharioti et al. (2023, arXiv:2307.03744) LLM 정확/오류→과의존; Bockstedt & Buckman (2025, *Mgmt Sci* 72(1)) loss aversion×AI 위임
+- **신규 인용(lit-review·CoVe 검증):** Spatharioti et al. (2023, arXiv:2307.03744) 정답-있는 계산 과제 + LLM 정확/오류→과의존; Bockstedt & Buckman (2025, *Mgmt Sci* 72(1)) loss aversion×AI 위임. 〔Qin et al. (2025)은 v7.2에서 프레임 제거 — Logg/Dietvorst는 배경 유지〕
 - **정독·리뷰 노트:** `quality_reports/lit_notes_18papers_2026-05-31.md`, `quality_reports/lit_review_ai_valuation_2026-05-31.md`
 - **메인 spec:** `quality_reports/specs/research_spec_aiwtp_gap.md` (§3 재조정 필요; §2-3/§2-4/§4-1/§4-5의 "분산 3배"·CRT→RSPM 정정 필요)
 - **관련 ADR:** ADR-001(between-subject 확장), ADR-003(전달방식 재검토), ADR-005(cross-calibration 부활), ADR-010(v6 Phase 1 역할 재정의)
