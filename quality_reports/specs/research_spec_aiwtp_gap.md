@@ -5,7 +5,11 @@
 **Working language:** 한국어 본문 + 영문 전문용어
 **Paper type:** lab experiment (2-chapter: induced **결정론적 산수 토큰** + homegrown 건강식품, between-subject)
 **용도:** 지도교수·동료 피드백용 내부 문서
-**상태:** **MAIN spec (v7 — 전체 2-chapter 정합화 완료)** — Context·§1·§2·§3·§4·§5·§6·§7 일관
+**상태:** ⚠️ **SUPERSEDED (프레임) by A′ — 2026-06-06.** value-knowability·결정론적 산수 토큰 프레임은 **ADR-012**로 폐기. 현행 기술 스펙 = `specs/2026-06-06_Aprime_redesign.md` (의존 reliance 척추 + 왜곡 공동기여 + 식품 응용). 본 v7은 **homegrown 식품 챕터·메커니즘·IC 절차 디테일**의 참조용으로 보존(헤드라인·코어게임은 A′ 우선). 전환 경위 = `decisions/2026-06-06_Aprime-reliance-spine.md`.
+
+> v7 이력(아래)은 보존. A′ 이전 결정(산수 토큰·Qin 제거·value knowability)은 모두 ADR-012가 대체.
+
+**(구) 상태:** MAIN spec (v7 — 전체 2-chapter 정합화 완료) — Context·§1·§2·§3·§4·§5·§6·§7 일관
 
 ### 버전 history
 
