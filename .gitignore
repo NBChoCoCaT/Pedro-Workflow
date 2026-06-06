@@ -55,23 +55,13 @@ CLAUDE.local.md
 # Quarto rendering artifacts
 .quarto/
 
-# quality_reports/ — per-project session logs, plans, specs, merges.
-# The directory structure ships in the template (via .gitkeep), but the
-# content is PROJECT-INTERNAL and shouldn't be inherited by forks.
-quality_reports/plans/*
-quality_reports/specs/*
-quality_reports/session_logs/*
-quality_reports/merges/*
-quality_reports/decisions/*
-quality_reports/checkpoints/*
-quality_reports/preregistrations/*
-!quality_reports/plans/.gitkeep
-!quality_reports/specs/.gitkeep
-!quality_reports/session_logs/.gitkeep
-!quality_reports/merges/.gitkeep
-!quality_reports/decisions/.gitkeep
-!quality_reports/checkpoints/.gitkeep
-!quality_reports/preregistrations/.gitkeep
+# quality_reports/ — per-project session logs, plans, specs, decisions, merges.
+# 본 프로젝트(03_AIWTPGap)는 working project로 운영되므로 산출물(.md)을 추적한다.
+# meta-governance.md의 "Session logs / Plans → committed, syncs via git" 정책과 일치.
+# 임시·드래프트 파일만 제외.
+quality_reports/**/*.tmp
+quality_reports/**/*.draft
+quality_reports/**/.DS_Store
 
 # R analysis outputs (generated artifacts; keep scripts, ignore outputs)
 scripts/R/_outputs/

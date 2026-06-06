@@ -1,48 +1,69 @@
 % =============================================================================
-% HelloWorld.tex — Minimal Beamer sample for verifying the workflow
+% HelloWorld.tex — 03_AIWTPGap Korean Beamer setup verification deck
 %
-% This deck uses Beamer's built-in Madrid theme and has NO dependency on
-% Preambles/header.tex. It compiles on a fresh fork without any setup.
-%
-% DELETE THIS FILE and replace with your own lectures once you're ready.
+% Purpose: confirm that XeLaTeX + xeCJK + KoPubWorld Dotum render Korean
+% body text and that the project preamble (Preambles/header.tex) loads
+% cleanly. Replace this file with the actual proposal once the setup is
+% verified.
 %
 % Compile with: /compile-latex HelloWorld
-% Or manually:  cd Slides && xelatex HelloWorld.tex
+% Or manually:
+%   cd Slides
+%   TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode HelloWorld.tex
 % =============================================================================
 
-\documentclass{beamer}
-\usetheme{Madrid}
+\documentclass[aspectratio=169]{beamer}
+\input{header}
 
-\title{HelloWorld: Academic Workflow Sample}
-\author{Your Name}
-\institute{Your Institution}
+\title{03\_AIWTPGap 작업환경 점검}
+\subtitle{한국어 Beamer 렌더링 검증}
+\author{[저자명]}
+\institute{[소속]}
 \date{\today}
 
 \begin{document}
 
 \frame{\titlepage}
 
-\begin{frame}{Why This Sample Exists}
-    \begin{itemize}
-        \item Verifies that XeLaTeX is installed and working
-        \item Confirms \texttt{/compile-latex} produces a valid PDF
-        \item Exercises the full 3-pass + bibtex pipeline (see citation below)
-        \item Provides a starting point before you build real lectures
-    \end{itemize}
-    Placeholder citation: see \cite{Example2024_book}.
+\begin{frame}{이 슬라이드의 목적}
+  \begin{itemize}
+    \item XeLaTeX이 정상 동작하는지 확인
+    \item \texttt{Preambles/header.tex}가 \texttt{TEXINPUTS}로 잘 로드되는지 확인
+    \item \textbf{KoPubWorld Dotum} 한글 폰트가 슬라이드에 올바르게 표시되는지 확인
+    \item 한·영 혼용(``WTP와 WTA'')에서 자동 공백이 잘 잡히는지 확인
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Next Steps}
-    \begin{enumerate}
-        \item Compile this deck: \texttt{/compile-latex HelloWorld}
-        \item Translate to Quarto: \texttt{/translate-to-quarto HelloWorld.tex}
-        \item Delete this file and create your own lecture
-    \end{enumerate}
+\begin{frame}{한·영 혼용 예시}
+  \begin{itemize}
+    \item \textbf{WTP}(willingness to pay)와 \textbf{WTA}(willingness to accept)의 차이는 endowment effect와 측정 오차 두 가설 모두로 설명할 수 있다.
+    \item 본 프로포절은 \textbf{induced value}와 \textbf{homegrown value} 두 조건을 결합한 dual design을 사용한다.
+    \item 가치 유도는 induced 조건에서 \textbf{BDM} 메커니즘으로, homegrown 조건에서 \textbf{SPA}(second-price auction)로 수행한다.
+  \end{itemize}
+
+  \vspace{0.5em}
+  \key{핵심:} AI-information의 효과가 두 조건에서 다르다면, 어느 채널이 작동하는지 식별할 수 있다.
 \end{frame}
 
-\begin{frame}{References}
-    \bibliographystyle{plain}
-    \bibliography{../Bibliography_base}
+\begin{frame}{TikZ \& 수식 렌더링 확인}
+  \begin{itemize}
+    \item 수식: 개별 추정량
+      \[
+        \widehat{\tau} \;=\; \frac{1}{n_1}\sum_{i:T_i=1} \Delta_i
+                            - \frac{1}{n_0}\sum_{i:T_i=0} \Delta_i,
+        \qquad \Delta_i = \mathrm{WTA}_i - \mathrm{WTP}_i.
+      \]
+    \item 컬러 강조: \good{positive}, \bad{negative}, \muted{neutral}
+    \item 본 슬라이드가 깨지지 않고 렌더링된다면 환경 설정 점검 완료.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{다음 단계}
+  \begin{enumerate}
+    \item 본 파일을 컴파일해 PDF 한글 표시 확인: \texttt{/compile-latex HelloWorld}
+    \item 다음 세션에서 프로포절 골격(\texttt{Slides/Proposal\_AIWTPGap.tex}) 작성
+    \item \texttt{Bibliography\_base.bib}에 핵심 문헌 채우기 (Plott--Zeiler, KKT 1990, 등)
+  \end{enumerate}
 \end{frame}
 
 \end{document}

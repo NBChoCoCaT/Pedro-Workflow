@@ -1,15 +1,15 @@
 # Preambles
 
-Shared LaTeX/Beamer preamble for lectures in this project.
+Shared LaTeX/Beamer preamble for the **03_AIWTPGap** Korean proposal.
 
-## Usage in a lecture
+## Usage in a deck
 
 ```latex
 \documentclass{beamer}
 \input{header}   % resolves via TEXINPUTS=../Preambles:$TEXINPUTS
 
-\title{Your Lecture}
-\author{You}
+\title{프로포절 제목}
+\author{[저자명]}
 \date{\today}
 
 \begin{document}
@@ -22,37 +22,36 @@ Compile with `/compile-latex <file>` — the skill sets `TEXINPUTS` for you. For
 
 ```bash
 cd Slides
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode YourLecture.tex
+TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode YourFile.tex
 ```
 
-## The palette contract
+## Korean font
 
-Color names in `header.tex` **must** match the SCSS variable names in [`../Quarto/theme-template.scss`](../Quarto/theme-template.scss) so Beamer and Quarto renderings use the same palette.
+The preamble loads **KoPub Dotum** via `xeCJK` + `fontspec`. Install the family from <https://www.kopus.or.kr/biz/electronic/font.do> (free for personal and academic use) before compiling.
 
-The `scripts/check-palette-sync.sh` script greps both files and reports any divergence:
+Fallback options if KoPub Dotum is unavailable on your system — edit the `\setCJKmainfont` line in `header.tex`:
+
+- `Apple SD Gothic Neo` (macOS default, no install required)
+- `Pretendard` (modern open-source — <https://github.com/orioncactus/pretendard>)
+- `Noto Sans CJK KR` (Google — broad availability)
+
+Verify what is installed:
 
 ```bash
-./scripts/check-palette-sync.sh
+fc-list | grep -i "KoPub\|Pretendard\|Noto.*CJK\|Apple SD"
 ```
-
-It's also invoked (non-blocking) from `./scripts/validate-setup.sh`.
-
-When you customize the palette for your project:
-
-1. Edit HEX values in both `Preambles/header.tex` (LaTeX) **and** `Quarto/theme-template.scss` (SCSS).
-2. Keep the names aligned: `primary-blue`, `primary-gold`, `highlight-yellow`, `light-bg`, `jet`, `positive`, `negative`, `neutral`, `hi-slate`, `hi-green`, `hi-red`.
-3. Run `./scripts/check-palette-sync.sh` — it should report "in sync".
 
 ## What's inside
 
-- **Palette** — 11 named colors matching the SCSS.
-- **Beamer theme assignments** — structure, titles, itemize, alert, blocks, minimal footer. Applied only under Beamer (`\@ifundefined{beamertemplate}`).
+- **Korean setup** — `xeCJK`, `fontspec`, KoPub Dotum main / sans / mono fonts, automatic CJK–Latin spacing, line-spread for Hangul readability.
+- **Palette** — 11 named colors used by Beamer theme assignments and TikZ snippets (`primary-blue`, `primary-gold`, `highlight-yellow`, `light-bg`, `jet`, `positive`, `negative`, `neutral`, `hi-slate`, `hi-green`, `hi-red`).
+- **Beamer theme assignments** — structure, titles, itemize, alert, blocks, minimal footer.
 - **TikZ libraries** — `arrows.meta, positioning, calc, decorations.pathreplacing, fit, shapes.geometric, backgrounds`.
 - **Shared TikZ styles** — `dag-node`, `decision-node`, `observed-edge`, `counterfactual-edge`, `confound-edge`, `observed-dot`, `counterfactual-dot`. Used by `templates/tikz-snippets/` and reusable in hand-written diagrams.
 - **Convenience macros** — `\muted{...}`, `\key{...}`, `\good{...}`, `\bad{...}`, `\transitionslide{...}`.
 
 ## Extending
 
-Add packages your lectures need *after* your `\input{header}` in each lecture, not in this file — that keeps the preamble small and auditable. Only add to `header.tex` if you are certain every lecture in the project needs it.
+Add packages your decks need *after* `\input{header}` in each `.tex` file, not in this preamble — that keeps the shared file small and auditable. Only add to `header.tex` if every deck in the project needs it.
 
-For a lecture-specific preamble (rare), create `Preambles/lectureN-addon.tex` and `\input` it after `header.tex`.
+For a deck-specific preamble (rare), create `Preambles/<name>-addon.tex` and `\input` it after `header.tex`.

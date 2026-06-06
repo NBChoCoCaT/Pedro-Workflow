@@ -1,28 +1,26 @@
 % =============================================================================
-% Preambles/header.tex — shared LaTeX/Beamer preamble for this project
+% Preambles/header.tex — shared LaTeX/Beamer preamble for 03_AIWTPGap
 %
-% Use from a Beamer lecture by prepending:
+% Korean experimental-economics proposal. Compile with XeLaTeX:
 %     \input{header}
-% and compiling with TEXINPUTS=../Preambles:$TEXINPUTS (the /compile-latex
-% skill does this automatically).
+% with TEXINPUTS=../Preambles:$TEXINPUTS (the /compile-latex skill does this).
 %
-% PALETTE CONTRACT. Color names defined here MUST match the names in
-% Quarto/theme-template.scss so Beamer and Quarto renderings use the same
-% palette. The scripts/check-palette-sync.sh script enforces this.
-%
-% To customize: edit the HEX values below AND the matching $variable in
-% Quarto/theme-template.scss, then run scripts/check-palette-sync.sh.
+% Required font: KoPubWorld Dotum (Medium / Bold). Install from
+% https://www.kopus.or.kr/biz/electronic/font.do (free for academic use).
+% Fallback options documented under "Korean font setup" below.
 % =============================================================================
 
 % -----------------------------------------------------------------------------
 % Engine detection + encoding
 %
-% Our /compile-latex skill uses XeLaTeX, where inputenc is unnecessary and
-% can produce encoding warnings. Only load inputenc under pdfTeX.
+% XeLaTeX is required (Korean rendering via xeCJK depends on it). Under pdfTeX
+% xeCJK is unavailable, so we fall back to inputenc and emit a clear warning.
 % -----------------------------------------------------------------------------
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[utf8]{inputenc}
+  \PackageWarningNoLine{header}{%
+    pdfTeX detected --- Korean text will not render. Compile with XeLaTeX.}
 \fi
 
 \usepackage{amsmath, amssymb, amsthm}
@@ -30,7 +28,57 @@
 \usepackage{graphicx}
 
 % -----------------------------------------------------------------------------
-% PALETTE — mirrors Quarto/theme-template.scss variable names.
+% Korean font setup (XeLaTeX only)
+%
+% Loads xeCJK and KoPubWorld Dotum. The fonts live under ~/Library/Fonts/ on
+% macOS. We pass file names (not family names) because the family name is
+% registered as Korean ("KoPubWorld돋움체") and fontspec is more robust with
+% explicit file references.
+%
+% Fallback ladder if KoPubWorld Dotum is unavailable: comment out the block
+% below and uncomment ONE of the alternatives.
+% -----------------------------------------------------------------------------
+\ifXeTeX
+  \usepackage{xeCJK}
+  \xeCJKsetup{%
+    CJKspace=true,           % automatic CJK-Latin spacing
+    AutoFakeSlant=0.18,      % italic-style fallback when no italic cut exists
+    CJKecglue={\hskip 0.18em plus 0.04em minus 0.04em}%
+  }
+
+  % --- KoPubWorld Dotum (primary) -------------------------------------------
+  % macOS Font Book registers these by PostScript name (no spaces). XeLaTeX's
+  % fontspec finds them via the system font registry without needing a
+  % Path= override. If your machine doesn't find them, install KoPubWorld
+  % Dotum (Medium / Bold / Light) into ~/Library/Fonts/ and rebuild the
+  % font cache, or comment this block out and uncomment the Apple SD Gothic
+  % Neo fallback below.
+  \setCJKmainfont[%
+    BoldFont=KoPubWorldDotumBold,
+    AutoFakeSlant=0.18
+  ]{KoPubWorldDotumMedium}
+  \setCJKsansfont[%
+    BoldFont=KoPubWorldDotumBold,
+    AutoFakeSlant=0.18
+  ]{KoPubWorldDotumMedium}
+  \setCJKmonofont{KoPubWorldDotumLight}
+
+  % --- Apple SD Gothic Neo fallback (uncomment if KoPub unavailable) --------
+  % \setCJKmainfont{Apple SD Gothic Neo}
+  % \setCJKsansfont{Apple SD Gothic Neo}
+  % \setCJKmonofont{Apple SD Gothic Neo}
+
+  % --- Pretendard fallback (uncomment if installed) -------------------------
+  % \setCJKmainfont{Pretendard}
+  % \setCJKsansfont{Pretendard}
+  % \setCJKmonofont{Pretendard}
+
+  % Slightly looser line spread improves Hangul readability on slides
+  \linespread{1.15}
+\fi
+
+% -----------------------------------------------------------------------------
+% PALETTE — Beamer theme + TikZ-snippet colors.
 % Load xcolor and define colors BEFORE anything that references them
 % (notably hyperref, hypersetup, and the Beamer color assignments).
 % -----------------------------------------------------------------------------

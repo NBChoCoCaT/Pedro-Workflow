@@ -146,3 +146,17 @@ The key insight: each pattern enforces independence differently. Critic-fixer us
 [LEARN:audit] **Surface-sync gate covers numeric counts but NOT enumerative tables.** v1.8.0's deep-audit caught the appendix "All Skills" table missing `/checkpoint` + `/preregister` AND "All Agents" missing the v1.5.0 peer-review trio (editor / domain-referee / methods-referee — pre-existing drift inherited across 3 releases). The `check-surface-sync.py` script counts assertion phrasings ("30 skills") but doesn't verify enumerative tables tabulate the same N items. Pet-peeves entry added (#18). Future: when adding a skill/agent, check the appendix tables — surface-sync won't catch the row drift.
 
 [LEARN:pattern] **`disable-model-invocation: true` is a load-bearing-write discipline, not a "do not disturb" toggle.** Set it on skills that write a *persistent file the user must explicitly intend to create* (lecture .tex, TikZ source, SKILL.md, checkpoint snapshot, preregistration document). Don't set it on skills that produce transient analysis output (proofread / review-r / visual-audit reports). Codified in `templates/skill-template.md` under "When to set `disable-model-invocation: true`". The flag still allows direct invocation as `/skill-name` — it only blocks model auto-trigger on heuristic match.
+
+## 03_AIWTPGap 프로젝트 (2026-05-23~)
+
+[LEARN:project] **03_AIWTPGap 도메인.** AI-assisted information provision (LLM 기반)이 WTP–WTA 갭에 미치는 영향을 측정하는 lab experiment 프로포절. 듀얼 디자인: (i) induced-value 옥션 — BDM 메커니즘으로 측정-side 왜곡 분리, (ii) homegrown-value 옥션 — SPA(second-price auction)로 preference-construction(endowment effect) 분리. 핵심 식별: 두 조건에서 AI-info treatment의 효과 차이가 misconception (Plott–Zeiler) vs reference-dependent preference (Kahneman–Knetsch–Thaler / Köszegi–Rabin) 채널을 가른다.
+
+[LEARN:project] **현 단계는 design & theory.** R/Stata 분석 코드 없음. 산출물은 한국어 Beamer PDF 프로포절 1종 (Quarto/HTML 미러 없음). 다음 단계는 IRB 승인 → 파일럿 → 본 실험.
+
+[LEARN:workflow] **한국어 작업 언어 정책 (03_AIWTPGap).** 모든 계획·세션 로그·스펙·결정 기록·프로포절 본문은 한국어로 작성한다. 단, 도메인 전문 용어 (WTP, WTA, BDM, SPA, induced value, homegrown value, endowment effect, prospect theory, reference-dependent preference 등) 및 영문 저자명 (`Plott and Zeiler (2005)`)은 영문 유지. 정책은 `.claude/rules/korean-language-convention.md`에 명문화. INV-1로 검토 시 강제.
+
+[LEARN:files] **03_AIWTPGap는 슬림화된 fork.** 본 프로젝트는 Quarto/HTML 인프라와 R/Stata 분석 인프라를 완전 제거한 상태. 제거 대상이었던 디렉터리·규칙·skill·agent는 upstream template (`pedrohcgs/claude-code-my-workflow`)에서 복원 가능. 분석 단계 진입 시 `replication-protocol.md`, `r-code-conventions.md`, `audit-reproducibility`, `review-r`, `cross-artifact-review` (이미 보존됨) 등을 다시 가져와야 함.
+
+[LEARN:latex] **xeCJK + KoPubWorld Dotum 설정.** macOS 사용자의 `~/Library/Fonts/`에 KoPubWorld Dotum (Bold/Medium/Light)이 설치되어 있어 `\setCJKmainfont`에 파일명(공백 포함)을 그대로 넘기면 인식된다. Family name이 한글 (`KoPubWorld돋움체`)이라 fontspec family 검색으로는 불안정 → 파일명 기반 지정이 더 robust. `Extension=.ttf` + `BoldFont=KoPubWorld Dotum Bold` 패턴 사용.
+
+[LEARN:scope] **Spec-then-plan + 단계 분할이 작업 부담을 크게 줄인다.** 03_AIWTPGap 첫 세션은 "설정 적응만, 프로포절 골격은 다음 세션"으로 분할했다. 4개 질문(폰트·미러·R 처리·메타데이터)으로 명세 확정 → plan 1회 승인 → 12-Phase 실행. 한 세션에서 설정·구조·초안까지 욕심내면 의사결정 피로와 컨텍스트 부하가 누적된다.
