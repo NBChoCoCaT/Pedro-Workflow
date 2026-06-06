@@ -160,3 +160,17 @@ The key insight: each pattern enforces independence differently. Critic-fixer us
 [LEARN:latex] **xeCJK + KoPubWorld Dotum 설정.** macOS 사용자의 `~/Library/Fonts/`에 KoPubWorld Dotum (Bold/Medium/Light)이 설치되어 있어 `\setCJKmainfont`에 파일명(공백 포함)을 그대로 넘기면 인식된다. Family name이 한글 (`KoPubWorld돋움체`)이라 fontspec family 검색으로는 불안정 → 파일명 기반 지정이 더 robust. `Extension=.ttf` + `BoldFont=KoPubWorld Dotum Bold` 패턴 사용.
 
 [LEARN:scope] **Spec-then-plan + 단계 분할이 작업 부담을 크게 줄인다.** 03_AIWTPGap 첫 세션은 "설정 적응만, 프로포절 골격은 다음 세션"으로 분할했다. 4개 질문(폰트·미러·R 처리·메타데이터)으로 명세 확정 → plan 1회 승인 → 12-Phase 실행. 한 세션에서 설정·구조·초안까지 욕심내면 의사결정 피로와 컨텍스트 부하가 누적된다.
+
+## 03_AIWTPGap A′ 전환 (2026-06-06, ADR-012)
+
+[LEARN:project] **현행 정체성 = A′ (구 WTP-WTA·산수토큰·value-knowability 모두 supersede).** AI가 *정답 아는(induced-value)* 가치평가를 돕나/왜곡하나 — **출처(AI vs 인간)·정확도 의존 β(k)**[헤드라인] + **왜곡 μ**(Corrigan 선례·BSR 분해)[메커니즘] + **식품 WTP·격차**[응용]. 코어 = 개인 BDM(무작위가격) + 사후믿음 BSR, 숨은 V·노이즈 신호 = *사적가치(common value 아님)*. 현행 스펙 `specs/2026-06-06_Aprime_redesign.md`, 결정 ADR-012. 위 line 152의 구(舊) BDM+SPA·misconception 프레임은 폐기됨.
+
+[LEARN:design] **앵커링 효과는 *앵커 종류*에 의존한다.** 임의·명백히 무관한 숫자(주민번호 등)는 IC elicitation(BDM)서 약화/소멸(Fudenberg-Levine-Maniadis 2012: binary lottery 0; Maniadis-Tufano-List 2014). 그러나 *가치-관련성 있어 보이는* 숫자(게시가·AI 추정값)는 IC 하에서도 왜곡 견고(Corrigan 2012 AJAE; Ioannidis 2023 JBEE). → "AI 추정값 앵커가 IC서 약할 것"은 오판. AI 숫자는 가치-관련 유형.
+
+[LEARN:method] **WOA(weight-on-advice) = (사후−사전)/(조언−사전) → pre/post 2단계 belief 측정이 *정의상* 필수.** between-subject만으론 개인수준 WOA 미식별. 메타 평균 WOA≈0.39 (Bailey et al. 2022).
+
+[LEARN:method] **BSR(binarized scoring rule)은 이론상 IC지만 *행동상* 비-IC — center-bias(0.5쪽 끌림).** Danz, Vesterlund & Wilson (2022, AER). belief elicitation 설계 시 neutral framing + 인센티브 정보 최소화 사전명시 필요.
+
+[LEARN:design] **"과소의존 vs 과의존" 판정엔 출처(source) arm이 필수.** 사회적학습은 외부신호 과소의존(Weizsäcker 2010), AI/HCI는 과의존(Logg 2019; Klingbeil 2024) 보고 — 그러나 두 문헌은 다른 패러다임. 동일 숫자·신뢰도를 *AI/인간/익명* 라벨로 무작위해야 모순을 한 설계서 식별. 단 You-Yang-Li(2022, JMIS 39(2):336–365)가 AI vs 인간+성능제시로 근접(appreciation이 오류 후에도 유지) → 차별점은 induced-value·IC·믿음/앵커 분해.
+
+[LEARN:lit] **Roth-Malouf(1979)·Berg et al.(1986)은 induced *preference*(binary lottery로 위험태도 유도)이지 induced *value* 실험이 아니며, 그 변형은 실패로 판명(Selten-Sadrieh-Abbink 1999; Oechssler-Sofianos 2021).** induced-value-over-a-good 선례는 Lee(2020)·Corrigan(2012)·Jacquemet(2013)·Cherry(2004) 계보.
